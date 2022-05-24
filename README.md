@@ -17,3 +17,9 @@ Model building, experiments, references and source code for the research work on
     - Prototypical networks using Euclidean Distance
 - Evaluated on ISIC 2018, Derm7pt and SD-198 datasets
 - Implementation Code NOT available
+
+### [[Elsevier-PR-2020] Temperature network for few-shot learning with distribution-aware large-margin metric](./%5BElsevier-PR-2020%5D%20Temperature%20network%20for%20few-shot%20learning%20with%20distribution-aware.pdf)
+
+- An improvement of Prototypical Networks, by generating query-specific prototypes and thus results in local
+and distribution-aware metric 
+- Sets different temperature for different categories to penalize query samples that are not close enough to their belonging categories.
