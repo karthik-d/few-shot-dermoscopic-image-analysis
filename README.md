@@ -8,7 +8,7 @@ Model building, experiments, references and source code for the research work on
 
 - The paper that proposed Relation Networks for Few-Shot Learning
 
-### [[NeurIPS-2017] Prototypical Networks for Few-shot Learning](./Litearure/%5BNeurIPS-2017%5D%20Prototypical%20Networks%20for%20Few-shot%20Learning.pdf)
+### [[NeurIPS-2017] Prototypical Networks for Few-shot Learning](./Literature/%5BNeurIPS-2017%5D%20Prototypical%20Networks%20for%20Few-shot%20Learning.pdf)
 
 - The paper that proposed Protoypical Networks for Few-Shot Learning
 
