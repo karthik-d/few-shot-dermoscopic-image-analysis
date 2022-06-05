@@ -27,8 +27,8 @@ class ISIC18_T3_Dataset(Dataset):
 
     def __getitem__(self, idx):
         # shuffling is taken care of by the DataLoader wrapper!
-        img_path = os.path.join(self.img_base_path, self.csv_df.iloc[idx, 0]+self.img_frmt_ext)
-        img_label = self.get_sparse_label(self.csv_df, self.idx)
+        img_path = os.path.join(self.img_base_path, "{0}.{1}".format(self.csv_df.iloc[idx, 0], self.img_frmt_ext))
+        img_label = self.get_sparse_label(self.csv_df, idx)
         # read and transform data
         img_data = io.read_image(img_path)
         if self.transform:
@@ -43,5 +43,5 @@ class ISIC18_T3_Dataset(Dataset):
         one_hot_label = csv_df.iloc[idx, 1:]
         for index, value in one_hot_label.items():
             if value == 1:
-                return ISIC_T3_Dataset.class_id_map.get(index)
+                return ISIC18_T3_Dataset.class_id_map.get(index)
         return -1

@@ -9,6 +9,7 @@ from data.ISIC18_T3_Dataset import ISIC18_T3_Dataset
 
 from tqdm import tqdm
 from torch.utils.data import DataLoader
+from matplotlib import pyplot as plot
 import numpy as np
 import torch
 import os
@@ -256,7 +257,7 @@ def run():
 	)
     train_dataloader = DataLoader(training_data, batch_size=8, shuffle=True)
     imgs, labels = next(iter(train_dataloader))
-    print(labels[0])
+    print(labels[0].squeeze())
     plot.imshow(imgs[0])
     plot.show()
     print("Works!")
