@@ -8,10 +8,6 @@ import errno
 import torch
 import os
 
-'''
-Inspired by https://github.com/pytorch/vision/pull/46
-'''
-
 IMG_CACHE = {}
 
 

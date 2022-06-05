@@ -4,6 +4,7 @@ from prototypical_loss import prototypical_loss as loss_fn
 from omniglot_dataset import OmniglotDataset
 from protonet import ProtoNet
 from parser_util import get_parser
+import config from config
 
 from tqdm import tqdm
 import numpy as np
@@ -12,10 +13,7 @@ import os
 
 
 def init_seed(opt):
-    '''
-    Disable cudnn to maximize reproducibility
-    '''
-    torch.cuda.cudnn_enabled = False
+    torch.cuda.cudnn_enabled = True
     np.random.seed(opt.manual_seed)
     torch.manual_seed(opt.manual_seed)
     torch.cuda.manual_seed(opt.manual_seed)
@@ -181,7 +179,7 @@ def eval(opt):
     options = get_parser().parse_args()
 
     if torch.cuda.is_available() and not options.cuda:
-        print("WARNING: You have a CUDA device, so you should probably run with --cuda")
+        print("CUDA device available and unused")
 
     init_seed(options)
     test_dataloader = init_dataset(options)[-1]
@@ -203,13 +201,12 @@ def main():
         os.makedirs(options.experiment_root)
 
     if torch.cuda.is_available() and not options.cuda:
-        print("WARNING: You have a CUDA device, so you should probably run with --cuda")
+        print("CUDA device available and unused")
 
     init_seed(options)
 
     tr_dataloader = init_dataloader(options, 'train')
     val_dataloader = init_dataloader(options, 'val')
-    # trainval_dataloader = init_dataloader(options, 'trainval')
     test_dataloader = init_dataloader(options, 'test')
 
     model = init_protonet(options)
@@ -222,6 +219,7 @@ def main():
                 optim=optim,
                 lr_scheduler=lr_scheduler)
     best_state, best_acc, train_loss, train_acc, val_loss, val_acc = res
+
     print('Testing with last model..')
     test(opt=options,
          test_dataloader=test_dataloader,
