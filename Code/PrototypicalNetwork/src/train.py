@@ -176,43 +176,42 @@ def eval(opt):
     '''
     Initialize everything and train
     '''
-    options = get_parser().parse_args()
 
-    if torch.cuda.is_available() and not options.cuda:
+    if torch.cuda.is_available() and not config.cuda:
         print("CUDA device available and unused")
 
-    init_seed(options)
-    test_dataloader = init_dataset(options)[-1]
-    model = init_protonet(options)
+    init_seed(config)
+    test_dataloader = init_dataset(config)[-1]
+    model = init_protonet(config)
     model_path = os.path.join(opt.experiment_root, 'best_model.pth')
     model.load_state_dict(torch.load(model_path))
 
-    test(opt=options,
+    test(opt=config,
          test_dataloader=test_dataloader,
          model=model)
 
 
 def main():
     '''
-    Initialize everything and train
+    Initialize and train
     '''
-    options = get_parser().parse_args()
-    if not os.path.exists(options.experiment_root):
-        os.makedirs(options.experiment_root)
+    
+    if not os.path.exists(config.experiment_root):
+        os.makedirs(config.experiment_root)
 
-    if torch.cuda.is_available() and not options.cuda:
+    if torch.cuda.is_available() and not config.cuda:
         print("CUDA device available and unused")
 
-    init_seed(options)
+    init_seed(config)
 
-    tr_dataloader = init_dataloader(options, 'train')
-    val_dataloader = init_dataloader(options, 'val')
-    test_dataloader = init_dataloader(options, 'test')
+    tr_dataloader = init_dataloader(config, 'train')
+    val_dataloader = init_dataloader(config, 'val')
+    test_dataloader = init_dataloader(config, 'test')
 
-    model = init_protonet(options)
-    optim = init_optim(options, model)
-    lr_scheduler = init_lr_scheduler(options, optim)
-    res = train(opt=options,
+    model = init_protonet(config)
+    optim = init_optim(config, model)
+    lr_scheduler = init_lr_scheduler(config, optim)
+    res = train(opt=config,
                 tr_dataloader=tr_dataloader,
                 val_dataloader=val_dataloader,
                 model=model,
@@ -221,21 +220,21 @@ def main():
     best_state, best_acc, train_loss, train_acc, val_loss, val_acc = res
 
     print('Testing with last model..')
-    test(opt=options,
+    test(opt=config,
          test_dataloader=test_dataloader,
          model=model)
 
     model.load_state_dict(best_state)
     print('Testing with best model..')
-    test(opt=options,
+    test(opt=config,
          test_dataloader=test_dataloader,
          model=model)
 
-    # optim = init_optim(options, model)
-    # lr_scheduler = init_lr_scheduler(options, optim)
+    # optim = init_optim(config, model)
+    # lr_scheduler = init_lr_scheduler(config, optim)
 
     # print('Training on train+val set..')
-    # train(opt=options,
+    # train(opt=config,
     #       tr_dataloader=trainval_dataloader,
     #       val_dataloader=None,
     #       model=model,
@@ -243,7 +242,7 @@ def main():
     #       lr_scheduler=lr_scheduler)
 
     # print('Testing final model..')
-    # test(opt=options,
+    # test(opt=config,
     #      test_dataloader=test_dataloader,
     #      model=model)
 

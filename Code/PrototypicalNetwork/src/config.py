@@ -2,23 +2,60 @@
 import os
 import argparse
 
-config = {
-    root='dataset',
-    exp = '',
-    nep = 100,
-    lr = 1e-03,
-    lrS = 20,
-    lrG = 0.5,
-    its = 100,
-    cTr = 60,
-    nsTr = 5,
-    nqTr = 5,
-    cVa = 5,
-    nsVa = 5,
-    nqVa = 15,
-    seed = 7,
+
+class DotDict(dict):
+
+    """
+    DotDict wraps around Python's dictionary to facilitate dot-access to dictionary elements
+    """
+
+    def __init__(self, *args, **kwargs):
+        super(Map, self).__init__(*args, **kwargs)
+        for arg in args:
+            if isinstance(arg, dict):
+                for k, v in arg.iteritems():
+                    self[k] = v
+
+        if kwargs:
+            for k, v in kwargs.iteritems():
+                self[k] = v
+
+    def __getattr__(self, attr):
+        return self.get(attr)
+
+    def __setattr__(self, key, value):
+        self.__setitem__(key, value)
+
+    def __setitem__(self, key, value):
+        super(Map, self).__setitem__(key, value)
+        self.__dict__.update({key: value})
+
+    def __delattr__(self, item):
+        self.__delitem__(item)
+
+    def __delitem__(self, key):
+        super(Map, self).__delitem__(key)
+        del self.__dict__[key]
+
+
+
+config = DotDict(
+    dataset_root='dataset',
+    experiment_root = '',
+    epochs = 100,
+    learning_rate = 1e-03,
+    lr_scheduler_step = 20,
+    lr_scheduler_gamma = 0.5,
+    iterations = 100,
+    classes_per_it_tr = 60,
+    num_support_tr = 5,
+    num_query_tr = 5,
+    classes_per_it_val = 5,
+    num_support_val = 5,
+    num_query_val = 15,
+    manual_seed = 7,
     cuda = True 
-}
+)
 
 # Descriptions
 
