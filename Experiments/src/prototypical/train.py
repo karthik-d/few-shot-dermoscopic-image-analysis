@@ -4,8 +4,11 @@
 #from omniglot_dataset import OmniglotDataset
 #from protonet import ProtoNet
 from prototypical.config import config
+from data.config import config as data_config
+from data.ISIC18_T3_Dataset import ISIC18_T3_Dataset
 
 from tqdm import tqdm
+from torch.utils.data import DataLoader
 import numpy as np
 import torch
 import os
@@ -247,6 +250,15 @@ def main():
 
 
 def run():
+    training_data = ISIC18_T3_Dataset(
+	os.path.join(data_config.csv_path, data_config.isic18_t3_train_csv),
+	os.path.join(data_config.data_path, data_config.isic18_t3_train_dir)
+	)
+    train_dataloader = DataLoader(training_data, batch_size=8, shuffle=True)
+    imgs, labels = next(iter(train_dataloader))
+    print(labels[0])
+    plot.imshow(imgs[0])
+    plot.show()
     print("Works!")
 
 if __name__ == '__main__':

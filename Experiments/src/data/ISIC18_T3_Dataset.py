@@ -3,9 +3,9 @@ from torchvision import io
 import os 
 import pandas as pd
 
-class ISIC_T3_Dataset(Dataset):
+class ISIC18_T3_Dataset(Dataset):
 
-    class_id_map = (
+    class_id_map = dict(
         MEL = 0,
         NV = 1,
         BCC = 2,
