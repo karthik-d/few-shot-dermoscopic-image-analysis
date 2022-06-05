@@ -1,14 +1,13 @@
 # coding=utf-8
-from prototypical_batch_sampler import PrototypicalBatchSampler
-from prototypical_loss import prototypical_loss as loss_fn
-from omniglot_dataset import OmniglotDataset
-from protonet import ProtoNet
-from parser_util import get_parser
-import config from config
+#from prototypical_batch_sampler import PrototypicalBatchSampler
+#from prototypical_loss import prototypical_loss as loss_fn
+#from omniglot_dataset import OmniglotDataset
+#from protonet import ProtoNet
+from prototypical.config import config
 
 from tqdm import tqdm
 import numpy as np
-import torch
+#import torch
 import os
 
 
@@ -247,5 +246,9 @@ def main():
     #      model=model)
 
 
+def run():
+    print("Works!")
+
 if __name__ == '__main__':
-    main()
+    # main()
+    pass
