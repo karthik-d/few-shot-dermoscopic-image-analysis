@@ -7,7 +7,7 @@ from prototypical.config import config
 
 from tqdm import tqdm
 import numpy as np
-#import torch
+import torch
 import os
 
 
