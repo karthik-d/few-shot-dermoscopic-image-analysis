@@ -3,6 +3,7 @@ from torchvision import io
 import os 
 import pandas as pd
 
+
 class ISIC18_T3_Dataset(Dataset):
 
     class_id_map = dict(
@@ -22,19 +23,30 @@ class ISIC18_T3_Dataset(Dataset):
         self.transform = None 
         self.target_transform = None
 
+
     def __len__(self):
         return len(self.csv_df)
 
+
     def __getitem__(self, idx):
+        
         # shuffling is taken care of by the DataLoader wrapper!
-        img_path = os.path.join(self.img_base_path, "{0}.{1}".format(self.csv_df.iloc[idx, 0], self.img_frmt_ext))
+        img_path = os.path.join(
+            self.img_base_path, 
+            "{0}.{1}".format(
+                self.csv_df.iloc[idx, 0], 
+                self.img_frmt_ext
+            )
+        )
         img_label = self.get_sparse_label(self.csv_df, idx)
+        
         # read and transform data
         img_data = io.read_image(img_path)
         if self.transform:
             img_data = self.transform(img_data)
         if self.target_transform:
             img_label = self.target_transform(img_label)
+        
         # return data, label
         return img_data, img_label
 
