@@ -2,9 +2,11 @@ import torch.nn as nn
 
 
 def conv_block(in_channels, out_channels):
-    '''
-    returns a block conv-bn-relu-pool
-    '''
+    
+    """
+    Returns a Conv Block of the config - Conv-BN-ReLU-Pool
+    """
+
     return nn.Sequential(
         nn.Conv2d(in_channels, out_channels, 3, padding=1),
         nn.BatchNorm2d(out_channels),
@@ -14,9 +16,10 @@ def conv_block(in_channels, out_channels):
 
 
 class ProtoNet(nn.Module):
-    '''
-    Model as described in the reference paper (JSnell)
-    '''
+    
+    """
+    Contructs an architecture as described in the reference paper (JSnell)
+    """
     
     def __init__(self, x_dim=1, hid_dim=64, z_dim=64):
         super(ProtoNet, self).__init__()
