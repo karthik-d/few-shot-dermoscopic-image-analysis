@@ -4,8 +4,8 @@ import os
 
 config = DotDict(
     
-    csv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), *(os.path.pardir,)*2, 'data'),
-    data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), *(os.path.pardir,)*2, 'data', 'datasets'),
+    csv_root_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), *(os.path.pardir,)*2, 'data'),
+    data_root_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), *(os.path.pardir,)*2, 'data', 'datasets'),
 
     isic18_t3_train_csv = 'ISIC18_T3_Train.csv',
     isic18_t3_val_csv = 'ISIC18_T3_Validation.csv',

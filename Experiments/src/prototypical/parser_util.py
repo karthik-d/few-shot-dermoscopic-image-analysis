@@ -1,7 +1,9 @@
-# coding=utf-8
 import os
 import argparse
 
+"""
+PURGE THIS FILE
+"""
 
 def get_parser():
     parser = argparse.ArgumentParser()

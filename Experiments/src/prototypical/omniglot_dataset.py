@@ -1,4 +1,3 @@
-# coding=utf-8
 from __future__ import print_function
 import torch.utils.data as data
 from PIL import Image
@@ -7,6 +6,10 @@ import shutil
 import errno
 import torch
 import os
+
+"""
+PURGE THIS FILE
+"""
 
 IMG_CACHE = {}
 

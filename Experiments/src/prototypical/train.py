@@ -1,8 +1,8 @@
-# coding=utf-8
-#from prototypical_batch_sampler import PrototypicalBatchSampler
-#from prototypical_loss import prototypical_loss as loss_fn
+from prototypical_batch_sampler import PrototypicalBatchSampler
+from prototypical_loss import prototypical_loss as loss_fn
+from protonet import ProtoNet
 #from omniglot_dataset import OmniglotDataset
-#from protonet import ProtoNet
+
 from prototypical.config import config
 from data.config import config as data_config
 from data.ISIC18_T3_Dataset import ISIC18_T3_Dataset

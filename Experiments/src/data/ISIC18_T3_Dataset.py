@@ -6,6 +6,11 @@ import pandas as pd
 
 class ISIC18_T3_Dataset(Dataset):
 
+    """
+    Extended custom `Dataset` class to interface
+    torch with the ISIC-2018 T3 Dataset
+    """
+
     class_id_map = dict(
         MEL = 0,
         NV = 1,
@@ -16,9 +21,33 @@ class ISIC18_T3_Dataset(Dataset):
         VASC = 6
     )
 
-    def __init__(self, csv_path, data_path, img_ext='jpg', transform=None, target_transform=None):
+
+    def __init__(self, root, mode='train', img_ext='jpg', transform=None, target_transform=None):
+        
+        """
+        Initialize the Dataset
+        - root: Root directory containing all data files
+        - mode: Determines the CSV file to use (ISIC18_T3_<mode>.csv)
+
+        NOTE: CSV must be present in the [ROOT]/data directory
+        """
+        
+        super(ISIC18_T3_Dataset, self).__init__()
+
+        # Fetch CSV
+        self.csv_path = os.path.join(
+            config.csv_root_path,
+            f"ISIC18_T3_{mode}.csv"
+        )
+        assert os.path.isfile(self.csv_path), f"CSV file was not found at {self.csv_path}"
+        
+        # Store CSV as Dataframe
         self.csv_df = pd.read_csv(csv_path)
-        self.img_base_path = data_path
+        
+        # Ensure data path validity
+        self.img_base_path = root
+        assert os.path.isdir(self.img_base_path), f"Need valid data path as `root`. Got {root}"
+        
         self.img_frmt_ext = img_ext
         self.transform = None 
         self.target_transform = None
@@ -29,8 +58,13 @@ class ISIC18_T3_Dataset(Dataset):
 
 
     def __getitem__(self, idx):
+
+        """
+        Generates a single (img, label) pair
+
+        NOTE: Shuffling is taken care of by the DataLoader wrapper!
+        """
         
-        # shuffling is taken care of by the DataLoader wrapper!
         img_path = os.path.join(
             self.img_base_path, 
             "{0}.{1}".format(
@@ -50,8 +84,15 @@ class ISIC18_T3_Dataset(Dataset):
         # return data, label
         return img_data, img_label
 
+    
     @staticmethod
     def get_sparse_label(csv_df, idx):
+        
+        """ 
+        Convert one-hot-encoded labels (from across the Dataframe columns)
+        to a single sparse label format
+        """
+        
         one_hot_label = csv_df.iloc[idx, 1:]
         for index, value in one_hot_label.items():
             if value == 1:
