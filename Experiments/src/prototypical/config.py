@@ -2,7 +2,7 @@ import os
 import argparse
 
 from utils.DotDict import DotDict
-from .. import config as root_config
+from config import config as root_config
 
 config = DotDict()
 config.update(root_config)

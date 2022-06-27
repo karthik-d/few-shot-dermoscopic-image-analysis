@@ -1,12 +1,12 @@
-from ..architectures.protonet import ProtoNet
-from prototypical_batch_sampler import PrototypicalBatchSampler
-from prototypical_loss import prototypical_loss as loss_fn
+from architectures.protonet import ProtoNet
+from .prototypical_batch_sampler import PrototypicalBatchSampler
+from .prototypical_loss import prototypical_loss as loss_fn
 #from omniglot_dataset import OmniglotDataset
 
 from prototypical.config import config
 from data.config import config as data_config
 from data.ISIC18_T3_Dataset import ISIC18_T3_Dataset
-from ..utils import helpers
+from utils import helpers
 
 from tqdm import tqdm
 from torch.utils.data import DataLoader
@@ -67,7 +67,8 @@ def init_dataloader(config, data_config, mode):
     # Wrap the dataset into torch's dataloader
     return torch.utils.data.DataLoader(
         dataset, 
-        batch_sampler=sampler
+        batch_sampler=sampler,
+        shuffle=True
     )
 
 
@@ -306,7 +307,7 @@ def train():
     model = init_protonet(config)
     optim = init_optim(config, model)
     lr_scheduler = init_lr_scheduler(config, optim)
-    res = train(
+    train_stats = train(
         config=config,
         tr_dataloader=tr_dataloader,
         val_dataloader=val_dataloader,
@@ -314,19 +315,27 @@ def train():
         optim=optim,
         lr_scheduler=lr_scheduler
     )
-    best_state, best_acc, train_loss, train_acc, val_loss, val_acc = res
+    best_state, best_acc, train_loss, train_acc, val_loss, val_acc = train_stats
 
 
 def run():
+
     training_data = ISIC18_T3_Dataset(
-	os.path.join(data_config.csv_path, data_config.isic18_t3_train_csv),
-	os.path.join(data_config.data_path, data_config.isic18_t3_train_dir)
+	    os.path.join(data_config.csv_path, data_config.isic18_t3_train_csv),
+	    os.path.join(data_config.data_path, data_config.isic18_t3_train_dir)
 	)
-    train_dataloader = DataLoader(training_data, batch_size=8, shuffle=True)
+
+    train_dataloader = DataLoader(
+        training_data, 
+        batch_size=8, 
+        shuffle=True
+    )
+
     imgs, labels = next(iter(train_dataloader))
     print(labels[0].squeeze())
     plot.imshow(imgs[0])
     plot.show()
+
     print("Works!")
 
 if __name__ == '__main__':
