@@ -1,6 +1,6 @@
 from architectures.metaderm import MetaDerm
 from architectures.protonet import ProtoNet
-from .prototypical_batch_sampler import PrototypicalBatchSampler
+from .exhaustive_batch_sampler import ExhaustiveBatchSampler
 from .prototypical_loss import prototypical_loss as loss_fn
 from . import transforms
 #from omniglot_dataset import OmniglotDataset
@@ -44,7 +44,7 @@ def init_dataset(config, data_config, mode):
     return dataset
 
 
-def init_sampler(config, labels, mode):
+def init_sampler(config, class_names, labels, mode):
 
     if mode == 'train':
         classes_per_it = config.classes_per_it_tr
@@ -54,7 +54,8 @@ def init_sampler(config, labels, mode):
         num_samples = config.num_support_val + config.num_query_val
 
     # Initialize and return the batch sampler
-    return PrototypicalBatchSampler(
+    return ExhaustiveBatchSampler(
+        class_names=class_names,
         labels=labels,
         classes_per_it=classes_per_it,
         num_samples=num_samples,
@@ -66,7 +67,7 @@ def init_dataloader(config, data_config, mode):
 
     # Make dataset and samples
     dataset = init_dataset(config, data_config, mode)
-    sampler = init_sampler(config, dataset.labels, mode)
+    sampler = init_sampler(config, dataset.class_names, dataset.labels, mode)
     
     # Wrap the dataset into torch's dataloader
     return torch.utils.data.DataLoader(

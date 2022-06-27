@@ -61,6 +61,7 @@ class ISIC18_T3_Dataset(Dataset):
         self.target_transform = None
         
         self.num_classes = len(self.class_id_map)
+        self.class_names = list(self.class_id_map.keys())
         # All `target` values of the dataset
         self.labels = list(map(
             lambda idx: self.get_sparse_label(self.csv_df, idx),
