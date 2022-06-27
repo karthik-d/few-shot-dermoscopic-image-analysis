@@ -141,6 +141,10 @@ def run_concrete_train_loop(config, tr_dataloader, model, optim, lr_scheduler, v
         'last_model.pth'
     )
 
+    # Delete existing log file
+    with open('train_log.txt', 'w'):
+        pass
+
     for epoch in range(config.epochs):
         print(f'=== Episode: {epoch} ===')
 
@@ -199,19 +203,19 @@ def run_concrete_train_loop(config, tr_dataloader, model, optim, lr_scheduler, v
             val_acc.append(acc.item())
 
         # Compute validation stats
-        avg_loss = np.mean(val_loss[-config.iterations:])
-        avg_acc = np.mean(val_acc[-config.iterations:])
+        avg_loss_val = np.mean(val_loss[-config.iterations:])
+        avg_acc_val = np.mean(val_acc[-config.iterations:])
 
         
         # Save best model --> replaced if it beats current best
-        if avg_acc >= best_acc:
+        if avg_acc_val >= best_acc:
             torch.save(model.state_dict(), best_model_path)
-            best_acc = avg_acc
+            best_acc = avg_acc_val
             best_state = model.state_dict()
 
         # Save current model --> replaced at each epoch
         torch.save(model.state_dict(), last_model_path)
-        print(f'Avg Val Loss: {avg_loss}, Avg Val Acc: {avg_acc}, Best Acc: {best_acc}')
+        print(f'Avg Val Loss: {avg_loss_val}, Avg Val Acc: {avg_acc_val}, Best Acc: {best_acc}')
 
         # LOG training stats
         helpers.save_list_to_file(
@@ -220,8 +224,8 @@ def run_concrete_train_loop(config, tr_dataloader, model, optim, lr_scheduler, v
                 'train_log.txt'
             ), 
             [
-                val  
-                for val in [epoch, train_loss, train_acc, val_loss, val_acc]
+                value  
+                for value in [epoch, avg_loss, avg_acc, avg_loss_val, avg_acc_val]
             ]
         )
 
