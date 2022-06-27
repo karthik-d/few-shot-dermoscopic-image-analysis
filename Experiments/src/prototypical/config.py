@@ -30,7 +30,20 @@ config.update(
         num_support_val = 3,  # 3-shot testing
         num_query_val = 0,    # NOT USED
         manual_seed = 7,
-        cuda = True 
+        cuda = True
+    )
+)
+
+config.update(
+    DotDict(
+        input_channels = 3,
+        input_xy = (224, 224)
+    )
+)
+
+config.update(
+    DotDict(
+        input_shape = (config.input_channels, *config.input_xy)
     )
 )
 

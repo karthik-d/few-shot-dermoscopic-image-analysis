@@ -27,7 +27,10 @@ def init_dataset(config, data_config, mode):
 
     dataset = ISIC18_T3_Dataset(
         mode=mode, 
-        root=data_config.isic18_t3_root_path
+        root=data_config.isic18_t3_root_path,
+        transform=transforms.compose_transforms([
+            get_resize_transform()
+        ])
     )
 
     # Ensure classes count
