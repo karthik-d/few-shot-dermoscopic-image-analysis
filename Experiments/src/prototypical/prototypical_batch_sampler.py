@@ -101,7 +101,9 @@ class PrototypicalBatchSampler(object):
                 batch[s] = self.indexes[label_idx][sample_idxs]
 
             # Construct batch
+            print(batch.shape)
             batch = batch[torch.randperm(len(batch))]
+            print(batch.shape)
             yield batch
 
     

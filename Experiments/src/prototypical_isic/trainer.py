@@ -115,124 +115,6 @@ def init_lr_scheduler(config, optim):
     )
 
 
-def run_concrete_train_loop(config, tr_dataloader, model, optim, lr_scheduler, val_dataloader=None):
-    
-    """ 
-    Run the concrete training loop on the model 
-    with the prototypical learning algorithm
-    """
-
-    device = 'cuda:0' if (torch.cuda.is_available() and config.cuda) else 'cpu'
-
-    if val_dataloader is None:
-        best_state = None
-
-    train_loss = []
-    train_acc = []
-    val_loss = []
-    val_acc = []
-    best_acc = 0
-
-    best_model_path = os.path.join(
-        config.logs_path, 
-        'best_model.pth'
-    )
-    last_model_path = os.path.join(
-        config.logs_path, 
-        'last_model.pth'
-    )
-
-    # Delete existing log file
-    with open('train_log.txt', 'w'):
-        pass
-
-    for epoch in range(config.epochs):
-        print(f'=== Episode: {epoch} ===')
-
-        tr_iter = iter(tr_dataloader)
-        model.train()
-
-        # TRAINING STEP --
-        for batch in tqdm(tr_iter):
-            
-            # retrace gradient and propagate batch
-            optim.zero_grad()            
-            x, y = batch
-            x, y = x.to(device), y.to(device)
-            
-            model_output = model(x)
-            loss, acc = loss_fn(
-                model_output, 
-                target=y,
-                n_support=config.num_support_tr
-            )
-            
-            loss.backward()
-            optim.step()
-
-            train_loss.append(loss.item())
-            train_acc.append(acc.item())
-
-        # Compute training stats
-        avg_loss = np.mean(train_loss[-config.iterations:])
-        avg_acc = np.mean(train_acc[-config.iterations:])
-
-        print(f'Avg Train Loss: {avg_loss}, Avg Train Acc: {avg_acc}')
-        lr_scheduler.step()
-
-        if val_dataloader is None:
-            continue
-
-        val_iter = iter(val_dataloader)
-        model.eval()
-
-        # VALIDATION STEP --
-        for batch in tqdm(val_iter):
-            
-            # only propagate batch
-            x, y = batch
-            x, y = x.to(device), y.to(device)
-
-            model_output = model(x)
-            loss, acc = loss_fn(
-                model_output, 
-                target=y,
-                n_support=config.num_support_val
-            )
-                
-            val_loss.append(loss.item())
-            val_acc.append(acc.item())
-
-        # Compute validation stats
-        avg_loss_val = np.mean(val_loss[-config.iterations:])
-        avg_acc_val = np.mean(val_acc[-config.iterations:])
-
-        
-        # Save best model --> replaced if it beats current best
-        if avg_acc_val >= best_acc:
-            torch.save(model.state_dict(), best_model_path)
-            best_acc = avg_acc_val
-            best_state = model.state_dict()
-
-        # Save current model --> replaced at each epoch
-        torch.save(model.state_dict(), last_model_path)
-        print(f'Avg Val Loss: {avg_loss_val}, Avg Val Acc: {avg_acc_val}, Best Acc: {best_acc}')
-
-        # LOG training stats
-        helpers.save_list_to_file(
-            os.path.join(
-                config.logs_path,
-                'train_log.txt'
-            ), 
-            [
-                value  
-                for value in [epoch, avg_loss, avg_acc, avg_loss_val, avg_acc_val]
-            ]
-        )
-
-    return best_state, best_acc, train_loss, train_acc, val_loss, val_acc
-
-
 def run_concrete_test_loop(config, test_dataloader, model):
     
     """ 
@@ -247,7 +129,7 @@ def run_concrete_test_loop(config, test_dataloader, model):
 
         test_iter = iter(test_dataloader)
         for batch in tqdm(test_iter):
-
+            
             x, y = batch
             x, y = x.to(device), y.to(device)
 

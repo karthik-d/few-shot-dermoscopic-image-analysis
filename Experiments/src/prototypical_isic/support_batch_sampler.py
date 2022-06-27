@@ -2,26 +2,19 @@ import numpy as np
 import torch
 
 
-class ExhaustiveBatchSampler(object):
+class SupportBatchSampler(object):
     
     """
-    ExhaustiveBatchSampler: yields a batch of indexes at each iteration.
-    Indexes are calculated by keeping in account 'classes_per_it' and 'num_samples' from the configuration,
+    SupportBatchSampler: yields a batch of indexes at each iteration.
+    Indexes are calculated by keeping in account 'classes_per_it' and 'num_support' from the configuration,
 
-    Contains:
+    Experiment Contains:
     - Support set domain (typically, the training dataset)
     - Query set domain   (typically, the testing dataset)
     Randomly samples the support set domain for SPC number of samples
-    Adds entire test set as the query set for the batch, as the last set of elements of the batch
-    Ensures that the support set does not contain the query
-    
-    At every iteration the batch indexes will refer to  'num_support' + 'num_query' samples
-    for 'classes_per_it' random classes.
-    
-    NOTE: __len__ returns the number of data_pts contained in the dataset
     """
 
-    def __init__(self, class_names, labels, classes_per_it, num_samples, iterations):
+    def __init__(self, class_names, labels, classes_per_it, num_support, iterations):
         
         """
         Initialize the object
@@ -30,15 +23,15 @@ class ExhaustiveBatchSampler(object):
         - labels: an iterable containing all the labels for the current dataset
                     samples indexes will be infered from this iterable.
         - classes_per_it: number of random classes for each iteration
-        - num_samples: number of samples for each iteration for each class (support + query)
+        - num_support: number of samples for each iteration for each class (support + query)
         - iterations: number of iterations (episodes) per epoch
         - class_names: ordered list of class names
         """
 
-        super(ExhaustiveBatchSampler, self).__init__()
+        super(SupportBatchSampler, self).__init__()
         self.labels = labels
         self.classes_per_it = classes_per_it
-        self.sample_per_class = num_samples
+        self.sample_per_class = num_support
         self.iterations = iterations
 
         self.class_names = class_names 
@@ -81,19 +74,19 @@ class ExhaustiveBatchSampler(object):
         """
         Generate a batch of indices
 
-        NOTE: Takes the first `cpi` number of classes -- cpi is just a convenience param, 
-                semantically, all classes need to be sampled in the Exhaustive Batch Sampler
+        NOTE: Samples `spc` samples for the samples classes
         """
 
         spc = self.sample_per_class
-        cpi = len(self.classes)         # Take all classes
+        cpi = self.classes_per_it     
 
         for _ in range(self.iterations):
             
             batch_size = spc * cpi
             batch = torch.LongTensor(batch_size)
             
-            # Obtain all class indices (in order)
+            # Get randomly sampled indices for classes
+            c_idxs = torch.randperm(len(self.classes))[:cpi]
             for label_idx, c in enumerate(self.classes):
                 
                 s = slice(i * spc, (i + 1) * spc)
