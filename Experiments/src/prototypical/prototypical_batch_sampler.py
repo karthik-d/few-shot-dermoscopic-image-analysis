@@ -42,8 +42,7 @@ class PrototypicalBatchSampler(object):
         self.idxs = range(len(self.labels))
         self.indexes = torch.Tensor(
             np.empty(
-                (len(self.classes), 
-                max(self.counts)), 
+                (len(self.classes), max(self.counts)), 
                 dtype=int
             ) * np.nan
         )
@@ -63,7 +62,7 @@ class PrototypicalBatchSampler(object):
 
             # update num_elem_per_class
             self.numel_per_class[label_idx] += 1
-
+            
 
     def __iter__(self):
         

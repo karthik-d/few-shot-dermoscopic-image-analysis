@@ -25,10 +25,10 @@ config.update(
         iterations = 100,
         classes_per_it_tr = 4,
         num_support_tr = 15,  # 15-shot training
-        num_query_tr = 0,     # NOT USED
+        num_query_tr = 0,    
         classes_per_it_val = 5,
         num_support_val = 3,  # 3-shot testing
-        num_query_val = 0,    # NOT USED
+        num_query_val = 0,   
         manual_seed = 7,
         cuda = True
     )

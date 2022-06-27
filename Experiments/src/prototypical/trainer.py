@@ -1,6 +1,8 @@
+from architectures.metaderm import MetaDerm
 from architectures.protonet import ProtoNet
 from .prototypical_batch_sampler import PrototypicalBatchSampler
 from .prototypical_loss import prototypical_loss as loss_fn
+from . import transforms
 #from omniglot_dataset import OmniglotDataset
 
 from prototypical.config import config
@@ -29,7 +31,7 @@ def init_dataset(config, data_config, mode):
         mode=mode, 
         root=data_config.isic18_t3_root_path,
         transform=transforms.compose_transforms([
-            get_resize_transform()
+            transforms.get_resize_transform()
         ])
     )
 
@@ -81,6 +83,18 @@ def init_protonet(config):
 
     device = 'cuda:0' if (torch.cuda.is_available() and config.cuda) else 'cpu'
     return ProtoNet().to(device)
+
+
+def init_metaderm(config):
+    
+    """
+    Initialize the MetaDerm architecture
+    """
+
+    device = 'cuda:0' if (torch.cuda.is_available() and config.cuda) else 'cpu'
+    model = MetaDerm().to(device)
+    print(model)
+    return model
 
 
 def init_optim(config, model):
@@ -264,7 +278,7 @@ def test(config):
     )
 
     # load model
-    model = init_protonet(config)
+    model = init_metaderm(config)
     model_path = os.path.join(
         config.logs_path, 
         'best_model.pth'
@@ -305,7 +319,7 @@ def train():
         mode='val'
     )
 
-    model = init_protonet(config)
+    model = init_metaderm(config)
     optim = init_optim(config, model)
     lr_scheduler = init_lr_scheduler(config, optim)
     train_stats = run_concrete_train_loop(

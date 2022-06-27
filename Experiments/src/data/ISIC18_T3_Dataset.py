@@ -60,9 +60,12 @@ class ISIC18_T3_Dataset(Dataset):
         self.transform = None 
         self.target_transform = None
         
-        # inferred/preset attributes
         self.num_classes = len(self.class_id_map)
-        self.labels = list(self.class_id_map.values())
+        # All `target` values of the dataset
+        self.labels = list(map(
+            lambda idx: self.get_sparse_label(self.csv_df, idx),
+            range(len(self.csv_df))
+        ))
 
 
     def __len__(self):
@@ -88,7 +91,7 @@ class ISIC18_T3_Dataset(Dataset):
         
         # read data
         try:
-            img_data = io.read_image(img_path)
+            img_data = io.read_image(img_path).float()
         except Exception:
             print("Error when trying to read data file")
             return None 
@@ -112,7 +115,7 @@ class ISIC18_T3_Dataset(Dataset):
         """
 
         one_hot_label = csv_df.iloc[idx, 1:]
-        for index, value in one_hot_label.items():
+        for classlabel, value in one_hot_label.items():
             if value == 1:
-                return ISIC18_T3_Dataset.class_id_map.get(index)
+                return ISIC18_T3_Dataset.class_id_map.get(classlabel)
         return -1
