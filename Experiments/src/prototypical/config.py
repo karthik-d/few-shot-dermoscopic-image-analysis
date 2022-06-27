@@ -9,8 +9,15 @@ config.update(root_config)
 
 config.update(
     DotDict(
-        dataset_root='dataset',
-        experiment_root = '',
+        logs_path = os.path.join(
+            config.logs_root_path,
+            'prototypical'
+        )
+    )
+)
+
+config.update(
+    DotDict(
         epochs = 100,
         learning_rate = 1e-03,
         lr_scheduler_step = 20,

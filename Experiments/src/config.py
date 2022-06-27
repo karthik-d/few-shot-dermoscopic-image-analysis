@@ -12,3 +12,12 @@ config.update(
         ) 
     )
 )
+
+config.update(
+    DotDict(
+        logs_root_path = os.path.join(
+            config.root_path, 
+            'logs'
+        ) 
+    )
+)
