@@ -1,25 +1,30 @@
-# coding=utf-8
 import os
 import argparse
 
 from utils.DotDict import DotDict
+from .. import config as root_config
 
-config = DotDict(
-    dataset_root='dataset',
-    experiment_root = '',
-    epochs = 100,
-    learning_rate = 1e-03,
-    lr_scheduler_step = 20,
-    lr_scheduler_gamma = 0.5,
-    iterations = 100,
-    classes_per_it_tr = 60,
-    num_support_tr = 5,
-    num_query_tr = 5,
-    classes_per_it_val = 5,
-    num_support_val = 5,
-    num_query_val = 15,
-    manual_seed = 7,
-    cuda = True 
+config = DotDict()
+config.update(root_config)
+
+config.update(
+    DotDict(
+        dataset_root='dataset',
+        experiment_root = '',
+        epochs = 100,
+        learning_rate = 1e-03,
+        lr_scheduler_step = 20,
+        lr_scheduler_gamma = 0.5,
+        iterations = 100,
+        classes_per_it_tr = 60,
+        num_support_tr = 5,
+        num_query_tr = 5,
+        classes_per_it_val = 5,
+        num_support_val = 5,
+        num_query_val = 15,
+        manual_seed = 7,
+        cuda = True 
+    )
 )
 
 # Descriptions
