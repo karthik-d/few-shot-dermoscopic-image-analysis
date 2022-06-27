@@ -74,11 +74,17 @@ class ISIC18_T3_Dataset(Dataset):
         )
         img_label = self.get_sparse_label(self.csv_df, idx)
         
-        # read and transform data
-        img_data = io.read_image(img_path)
-        if self.transform:
+        # read data
+        try:
+            img_data = io.read_image(img_path)
+        except Exception:
+            print("Error when trying to read data file")
+            return None 
+
+        # apply transforms
+        if self.transform is not None:
             img_data = self.transform(img_data)
-        if self.target_transform:
+        if self.target_transform is not None:
             img_label = self.target_transform(img_label)
         
         # return data, label
@@ -92,7 +98,7 @@ class ISIC18_T3_Dataset(Dataset):
         Convert one-hot-encoded labels (from across the Dataframe columns)
         to a single sparse label format
         """
-        
+
         one_hot_label = csv_df.iloc[idx, 1:]
         for index, value in one_hot_label.items():
             if value == 1:
