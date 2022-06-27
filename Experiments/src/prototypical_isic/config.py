@@ -21,8 +21,8 @@ config.update(
         classes_per_it_val = 5,
         num_support_val = 3,  # 3-shot testing
         num_query_val = 10,   
-        classes_per_it_test = 5,
-        num_support_test = 3,  # 3-shot testing
+        classes_per_it_test = 7,  # Use all classes!
+        num_support_test = 3,     # 3-shot testing
         num_query_test = 10,   
         manual_seed = 7,
         cuda = True
