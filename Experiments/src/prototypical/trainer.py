@@ -204,7 +204,6 @@ def run_concrete_train_loop(config, tr_dataloader, model, optim, lr_scheduler, v
 
         
         # Save best model --> replaced if it beats current best
-        print(f'Avg Val Loss: {avg_loss}, Avg Val Acc: {avg_acc}, Best Acc: {best_acc}')
         if avg_acc >= best_acc:
             torch.save(model.state_dict(), best_model_path)
             best_acc = avg_acc
@@ -212,6 +211,7 @@ def run_concrete_train_loop(config, tr_dataloader, model, optim, lr_scheduler, v
 
         # Save current model --> replaced at each epoch
         torch.save(model.state_dict(), last_model_path)
+        print(f'Avg Val Loss: {avg_loss}, Avg Val Acc: {avg_acc}, Best Acc: {best_acc}')
 
         # LOG training stats
         helpers.save_list_to_file(
