@@ -28,6 +28,8 @@ class ISIC18_T3_Dataset(Dataset):
         Initialize the Dataset
         - root: Root directory containing all data files
         - mode: Determines the CSV file to use (ISIC18_T3_<mode>.csv)
+                Also determined the subdirectory for data split
+                Valid values: <subdirectory names within the data root>
 
         NOTE: CSV must be present in the [ROOT]/data directory
         """
@@ -47,6 +49,11 @@ class ISIC18_T3_Dataset(Dataset):
         # Ensure data path validity
         self.img_base_path = root
         assert os.path.isdir(self.img_base_path), f"Need valid data path as `root`. Got {root}"
+        self.img_concrete_path = os.path.join(
+            self.img_base_path,
+            mode 
+        )
+        assert os.path.isdir(self.img_concrete_path), f"Could not find valid data path at {self.img_concrete_path}"
         
         self.img_frmt_ext = img_ext
         self.transform = None 
@@ -66,7 +73,7 @@ class ISIC18_T3_Dataset(Dataset):
         """
         
         img_path = os.path.join(
-            self.img_base_path, 
+            self.img_concrete_path, 
             "{0}.{1}".format(
                 self.csv_df.iloc[idx, 0], 
                 self.img_frmt_ext

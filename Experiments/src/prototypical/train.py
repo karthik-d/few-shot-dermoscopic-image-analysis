@@ -22,9 +22,12 @@ def init_seed(opt):
     torch.cuda.manual_seed(opt.manual_seed)
 
 
-def init_dataset(config, mode, data_path):
+def init_dataset(config, data_config, mode):
 
-    dataset = OmniglotDataset(mode=mode, root=data_path)
+    dataset = ISIC18_T3_Dataset(
+        mode=mode, 
+        root=data_config.isic18_t3_root_path
+    )
     n_classes = len(np.unique(dataset.y))
     if n_classes < opt.classes_per_it_tr or n_classes < opt.classes_per_it_val:
         raise(Exception('There are not enough classes in the dataset in order ' +
