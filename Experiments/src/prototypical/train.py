@@ -98,7 +98,7 @@ def init_lr_scheduler(config, optim):
     )
 
 
-def train(config, tr_dataloader, model, optim, lr_scheduler, val_dataloader=None):
+def run_concrete_train_loop(config, tr_dataloader, model, optim, lr_scheduler, val_dataloader=None):
     
     """ 
     Run the concrete training loop on the model 
@@ -210,7 +210,7 @@ def train(config, tr_dataloader, model, optim, lr_scheduler, val_dataloader=None
     return best_state, best_acc, train_loss, train_acc, val_loss, val_acc
 
 
-def test(config, test_dataloader, model):
+def run_concrete_test_loop(config, test_dataloader, model):
     
     """ 
     Run a trained model through the test dataset
@@ -243,29 +243,46 @@ def test(config, test_dataloader, model):
     return avg_acc
 
 
-def eval(config):
-    '''
-    Initialize everything and train
-    '''
+def test(config):
+    
+    """
+    Initialize all parameters and test the model
+    - driver wrapper for model testing
+    """
 
     if torch.cuda.is_available() and not config.cuda:
         print("CUDA device available and unused")
 
+    # load dataset
     init_seed(config)
-    test_dataloader = init_dataset(config)[-1]
+    test_dataloader = init_dataloader(
+        config=config, 
+        data_config=data_config, 
+        mode='test'
+    )
+
+    # load model
     model = init_protonet(config)
-    model_path = os.path.join(config.logs_path, 'best_model.pth')
+    model_path = os.path.join(
+        config.logs_path, 
+        'best_model.pth'
+    )
     model.load_state_dict(torch.load(model_path))
 
-    test(config=config,
-         test_dataloader=test_dataloader,
-         model=model)
+    # run test
+    run_concrete_test_loop(
+        config=config,
+        test_dataloader=test_dataloader,
+        model=model
+    )
 
 
-def main():
-    '''
-    Initialize and train
-    '''
+def train():
+    
+    """
+    Initialize all parameters and train the model
+    - driver wrapper for model training
+    """
     
     if not os.path.exists(config.logs_path):
         os.makedirs(config.logs_path)
@@ -275,47 +292,29 @@ def main():
 
     init_seed(config)
 
-    tr_dataloader = init_dataloader(config, 'train')
-    val_dataloader = init_dataloader(config, 'val')
-    test_dataloader = init_dataloader(config, 'test')
+    tr_dataloader = init_dataloader(
+        config=config, 
+        data_config=data_config,
+        mode='train'
+    )
+    val_dataloader = init_dataloader(
+        config=config, 
+        data_config=data_config,
+        mode='val'
+    )
 
     model = init_protonet(config)
     optim = init_optim(config, model)
     lr_scheduler = init_lr_scheduler(config, optim)
-    res = train(config=config,
-                tr_dataloader=tr_dataloader,
-                val_dataloader=val_dataloader,
-                model=model,
-                optim=optim,
-                lr_scheduler=lr_scheduler)
+    res = train(
+        config=config,
+        tr_dataloader=tr_dataloader,
+        val_dataloader=val_dataloader,
+        model=model,
+        optim=optim,
+        lr_scheduler=lr_scheduler
+    )
     best_state, best_acc, train_loss, train_acc, val_loss, val_acc = res
-
-    print('Testing with last model..')
-    test(config=config,
-         test_dataloader=test_dataloader,
-         model=model)
-
-    model.load_state_dict(best_state)
-    print('Testing with best model..')
-    test(config=config,
-         test_dataloader=test_dataloader,
-         model=model)
-
-    # optim = init_optim(config, model)
-    # lr_scheduler = init_lr_scheduler(config, optim)
-
-    # print('Training on train+val set..')
-    # train(config=config,
-    #       tr_dataloader=trainval_dataloader,
-    #       val_dataloader=None,
-    #       model=model,
-    #       optim=optim,
-    #       lr_scheduler=lr_scheduler)
-
-    # print('Testing final model..')
-    # test(config=config,
-    #      test_dataloader=test_dataloader,
-    #      model=model)
 
 
 def run():
