@@ -142,7 +142,7 @@ def run_concrete_train_loop(config, tr_dataloader, model, optim, lr_scheduler, v
     )
 
     for epoch in range(config.epochs):
-        print(f'=== Epoch: {epoch} ===')
+        print(f'=== Episode: {epoch} ===')
 
         tr_iter = iter(tr_dataloader)
         model.train()

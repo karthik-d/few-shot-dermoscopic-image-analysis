@@ -91,9 +91,10 @@ class ISIC18_T3_Dataset(Dataset):
         
         # read data
         try:
+            print(img_path)
             img_data = io.read_image(img_path).float()
-        except Exception:
-            print("Error when trying to read data file")
+        except Exception as e:
+            print("Error when trying to read data file:", e)
             return None 
 
         # apply transforms

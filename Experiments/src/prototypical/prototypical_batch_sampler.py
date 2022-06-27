@@ -88,9 +88,20 @@ class PrototypicalBatchSampler(object):
                 ).long()[self.classes == c].item()
                 
                 # Get randomly sampled indices for samples
-                sample_idxs = torch.randperm(
-                    self.numel_per_class[label_idx]
-                )[:spc]
+                # sample_idxs = torch.randperm(
+                #     self.numel_per_class[label_idx]
+                # )[:spc]
+                # Replicate sampling if class does NOT have sufficient samples
+                sample_idxs = torch.empty(0, dtype=torch.int8)
+                while(len(sample_idxs)!=spc):
+                    remain = spc - len(sample_idxs)
+                    sample_idxs = torch.cat([
+                        sample_idxs,
+                        torch.randperm(
+                            self.numel_per_class[label_idx]
+                        )[:min(remain, spc)]
+                    ])
+                    print(sample_idxs)
 
                 batch[s] = self.indexes[label_idx][sample_idxs]
 
