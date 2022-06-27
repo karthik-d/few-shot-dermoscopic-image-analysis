@@ -265,7 +265,7 @@ def run_concrete_test_loop(config, test_dataloader, model):
     return avg_acc
 
 
-def test(config):
+def test():
     
     """
     Initialize all parameters and test the model
