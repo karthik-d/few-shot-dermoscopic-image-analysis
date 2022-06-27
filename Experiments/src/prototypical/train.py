@@ -1,11 +1,12 @@
+from ..architectures.protonet import ProtoNet
 from prototypical_batch_sampler import PrototypicalBatchSampler
 from prototypical_loss import prototypical_loss as loss_fn
-from ..architectures.protonet import ProtoNet
 #from omniglot_dataset import OmniglotDataset
 
 from prototypical.config import config
 from data.config import config as data_config
 from data.ISIC18_T3_Dataset import ISIC18_T3_Dataset
+from ..utils import helpers
 
 from tqdm import tqdm
 from torch.utils.data import DataLoader
@@ -81,34 +82,30 @@ def init_protonet(config):
 
 
 def init_optim(config, model):
-    '''
-    Initialize optimizer
-    '''
-    return torch.optim.Adam(params=model.parameters(),
-                            lr=config.learning_rate)
+
+    return torch.optim.Adam(
+        params=model.parameters(),
+        lr=config.learning_rate
+    )
 
 
 def init_lr_scheduler(config, optim):
-    '''
-    Initialize the learning rate scheduler
-    '''
-    return torch.optim.lr_scheduler.StepLR(optimizer=optim,
-                                           gamma=config.lr_scheduler_gamma,
-                                           step_size=config.lr_scheduler_step)
 
-
-def save_list_to_file(path, thelist):
-    with open(path, 'w') as f:
-        for item in thelist:
-            f.write("%s\n" % item)
+    return torch.optim.lr_scheduler.StepLR(
+        optimizer=optim,
+        gamma=config.lr_scheduler_gamma,
+        step_size=config.lr_scheduler_step
+    )
 
 
 def train(config, tr_dataloader, model, optim, lr_scheduler, val_dataloader=None):
-    '''
-    Train the model with the prototypical learning algorithm
-    '''
+    
+    """ 
+    Run the concrete training loop on the model 
+    with the prototypical learning algorithm
+    """
 
-    device = 'cuda:0' if torch.cuda.is_available() and config.cuda else 'cpu'
+    device = 'cuda:0' if (torch.cuda.is_available() and config.cuda) else 'cpu'
 
     if val_dataloader is None:
         best_state = None
@@ -166,7 +163,7 @@ def train(config, tr_dataloader, model, optim, lr_scheduler, val_dataloader=None
     torch.save(model.state_dict(), last_model_path)
 
     for name in ['train_loss', 'train_acc', 'val_loss', 'val_acc']:
-        save_list_to_file(os.path.join(config.experiment_root,
+        helpers.save_list_to_file(os.path.join(config.experiment_root,
                                        name + '.txt'), locals()[name])
 
     return best_state, best_acc, train_loss, train_acc, val_loss, val_acc
