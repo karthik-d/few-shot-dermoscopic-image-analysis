@@ -214,14 +214,16 @@ def run_concrete_train_loop(config, tr_dataloader, model, optim, lr_scheduler, v
         torch.save(model.state_dict(), last_model_path)
 
         # LOG training stats
-        for name in ['epoch', 'train_loss', 'train_acc', 'val_loss', 'val_acc']:
-            helpers.save_list_to_file(
-                os.path.join(
-                    config.logs_path,
-                    name + '.txt'
-                ), 
-                locals()[name]
-            )
+        helpers.save_list_to_file(
+            os.path.join(
+                config.logs_path,
+                'train_log.txt'
+            ), 
+            [
+                val  
+                for val in [epoch, train_loss, train_acc, val_loss, val_acc]
+            ]
+        )
 
     return best_state, best_acc, train_loss, train_acc, val_loss, val_acc
 
