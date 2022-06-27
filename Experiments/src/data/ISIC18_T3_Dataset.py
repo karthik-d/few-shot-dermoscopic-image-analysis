@@ -3,6 +3,7 @@ from torchvision import io
 import os 
 import pandas as pd
 
+from .config import config
 
 class ISIC18_T3_Dataset(Dataset):
 
@@ -44,7 +45,7 @@ class ISIC18_T3_Dataset(Dataset):
         assert os.path.isfile(self.csv_path), f"CSV file was not found at {self.csv_path}"
         
         # Store CSV as Dataframe
-        self.csv_df = pd.read_csv(csv_path)
+        self.csv_df = pd.read_csv(self.csv_path)
         
         # Ensure data path validity
         self.img_base_path = root
@@ -61,7 +62,7 @@ class ISIC18_T3_Dataset(Dataset):
         
         # inferred/preset attributes
         self.num_classes = len(self.class_id_map)
-        self.labels = list(self.class_id_map.keys())
+        self.labels = list(self.class_id_map.values())
 
 
     def __len__(self):
@@ -75,7 +76,7 @@ class ISIC18_T3_Dataset(Dataset):
 
         NOTE: Shuffling is taken care of by the DataLoader wrapper!
         """
-        
+        idx = idx.item()
         img_path = os.path.join(
             self.img_concrete_path, 
             "{0}.{1}".format(

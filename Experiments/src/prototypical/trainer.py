@@ -31,8 +31,7 @@ def init_dataset(config, data_config, mode):
     )
 
     # Ensure classes count
-    n_classes = len(np.unique(dataset.num_classes))
-    if n_classes < config.classes_per_it_tr or n_classes < config.classes_per_it_val:
+    if dataset.num_classes < config.classes_per_it_tr or dataset.num_classes < config.classes_per_it_val:
         raise(Exception('There are not enough classes in the dataset in order ' +
                         'to satisfy the chosen classes_per_it. Decrease the ' +
                         'classes_per_it_{tr/val} option and try again.'))
@@ -67,8 +66,7 @@ def init_dataloader(config, data_config, mode):
     # Wrap the dataset into torch's dataloader
     return torch.utils.data.DataLoader(
         dataset, 
-        batch_sampler=sampler,
-        shuffle=True
+        batch_sampler=sampler
     )
 
 
@@ -307,7 +305,7 @@ def train():
     model = init_protonet(config)
     optim = init_optim(config, model)
     lr_scheduler = init_lr_scheduler(config, optim)
-    train_stats = train(
+    train_stats = run_concrete_train_loop(
         config=config,
         tr_dataloader=tr_dataloader,
         val_dataloader=val_dataloader,
