@@ -58,6 +58,10 @@ class ISIC18_T3_Dataset(Dataset):
         self.img_frmt_ext = img_ext
         self.transform = None 
         self.target_transform = None
+        
+        # inferred/preset attributes
+        self.num_classes = len(self.class_id_map)
+        self.labels = list(self.class_id_map.keys())
 
 
     def __len__(self):
