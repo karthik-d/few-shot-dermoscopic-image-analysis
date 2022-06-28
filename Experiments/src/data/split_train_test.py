@@ -21,6 +21,8 @@ SRC_DIR_NAME = "train"
 
 DATA_ROOT_PATH = config.isic18_t3_root_path
 
+assert len(SPLIT_RATIOS) == len(SPLIT_DIR_NAMES) == len(SPLIT_CSV_NAMES), "Split parameter lists must be of same length"
+
 
 def split_data():
 
@@ -42,12 +44,18 @@ def split_data():
     assert os.path.isdir(alldata_img_path), f"Need valid data path as `root`. Got {alldata_img_path}"
 
     acc = 0
+    split_dfs = [ 
+        pd.DataFrame(columns=alldata_csv_df.columns)
+        for _ in range(len(SPLIT_RATIOS)) 
+    ]
     # Split and concatenate for each class
     for idx, classname in enumerate(alldata_csv_df.columns):
         
         # get all rows for current class
         class_rows_df = alldata_csv_df.loc[alldata_csv_df[classname]==1.0, :]
-        acc += len(class_rows_df)
+       
+        # make all the splits
+
     print(acc)
 
     num_classes = len(class_id_map)
