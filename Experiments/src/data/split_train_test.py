@@ -20,6 +20,7 @@ SRC_CSV_NAME = "ISIC18_T3_train.csv"
 SRC_DIR_NAME = "train"
 
 DATA_ROOT_PATH = config.isic18_t3_root_path
+DATA_EXTN = "jpg"
 
 assert len(SPLIT_RATIOS) == len(SPLIT_DIR_NAMES) == len(SPLIT_CSV_NAMES), "Split parameter lists must be of same length"
 
@@ -78,13 +79,38 @@ def split_data():
                 name
             )
         )
+        print(f"Dataframe with {len(split_dfs[idx])} images saved, for split name {name}")
+
+    
+    # Move corresponding data for splits
+    for idx, dir_name in enumerate(SPLIT_DIR_NAMES):
+
+        # create destination if it doesn't exist
+        destn_path = os.path.join(
+            DATA_ROOT_PATH,
+            dir_name 
+        )
+        if not os.path.isdir(destn_path):
+            Path(destn_path).mkdir(
+                parents=True,
+                exist_ok=False
+            )
+
+        # move split's images
+        for img_name in split_dfs[idx].iloc[:, 0]:
+            os.rename(
+                os.path.join(
+                    alldata_img_path,
+                    f"{img_name}.{DATA_EXTN}"
+                ),
+                os.path.join(
+                    destn_path,
+                    f"{img_name}.{DATA_EXTN}"
+                )
+            )
+    
+    print("Images for splits moved")
 
 
-    num_classes = len(class_id_map)
-    class_names = list(class_id_map.keys())
-    # All `target` values of the dataset
-    labels = list(map(
-        lambda idx: get_sparse_label(csv_df, idx),
-        range(len(csv_df))
-    ))
+
 
