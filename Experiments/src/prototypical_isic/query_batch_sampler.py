@@ -3,22 +3,22 @@ import numpy as np
 import torch
 
 
-class PrototypicalBatchSampler(object):
+class QueryBatchSampler(object):
     
     """
-    PrototypicalBatchSampler: yields a batch of indexes at each iteration.
-    Indexes are calculated by keeping in account 'classes_per_it' and 'num_samples' from the configuration,
-    
-    At every iteration the batch indexes will refer to  'num_support' + 'num_query' samples
-    for 'classes_per_it' random classes.
-    
-    NOTE: __len__ returns the number of episodes per epoch
+   Indexes are calculated by keeping in account 'classes_per_it' and 'num_support' from the configuration,
+
+    Experiment Contains:
+    - Support set domain (typically, the training dataset)
+    - Query set domain   (typically, the testing dataset)
+    Generates 1 query idx from the query set domain, at a time
+    At the end of all iterations, ensures that all images have been queried
     """
 
-    def __init__(self, labels, classes_per_it, num_samples, iterations):
+    def __init__(self, labels, classes_per_it, num_samples):
         
         """
-        Initialize the PrototypicalBatchSampler object
+        Initialize the QueryBatchSampler object
         
         Args:
         - labels: an iterable containing all the labels for the current dataset
@@ -28,7 +28,7 @@ class PrototypicalBatchSampler(object):
         - iterations: number of iterations (episodes) per epoch
         """
 
-        super(PrototypicalBatchSampler, self).__init__()
+        super(QueryBatchSampler, self).__init__()
         self.labels = labels
         self.classes_per_it = classes_per_it
         self.sample_per_class = num_samples
@@ -101,7 +101,9 @@ class PrototypicalBatchSampler(object):
                 batch[s] = self.indexes[label_idx][sample_idxs]
 
             # Construct batch
+            print(batch.shape)
             batch = batch[torch.randperm(len(batch))]
+            print(batch.shape)
             yield batch
 
     

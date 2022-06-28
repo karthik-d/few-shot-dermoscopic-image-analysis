@@ -38,6 +38,10 @@ config.update(
         isic18_t3_val_path = os.path.join(
             config.isic18_t3_root_path, 
             'val'
+        ),
+        isic18_t3_test_path = os.path.join(
+            config.isic18_t3_root_path, 
+            'test'
         )
     )
 )

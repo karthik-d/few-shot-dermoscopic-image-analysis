@@ -19,9 +19,9 @@ config.update(
         num_support_tr = 15,  # 15-shot training
         num_query_tr = 10,    
         classes_per_it_val = 5,
-        num_support_val = 3,  # 3-shot testing
+        num_support_val = 3,        # 3-shot testing
         num_query_val = 10,   
-        classes_per_it_test = 7,  # Use all classes!
+        classes_per_it_test = 2,  
         num_support_test = 3,     # 3-shot testing
         num_query_test = 10,   
         manual_seed = 7,
