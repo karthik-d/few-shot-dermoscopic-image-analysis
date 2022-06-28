@@ -77,7 +77,8 @@ def split_data():
             os.path.join(
                 config.csv_root_path,
                 name
-            )
+            ),
+            index=False
         )
         print(f"Dataframe with {len(split_dfs[idx])} images saved, for split name {name}")
 

@@ -146,7 +146,7 @@ def test():
     test_dataloader = init_dataloader(
         config=config, 
         data_config=data_config, 
-        mode='val'
+        mode='test'
     )
 
     # load model
