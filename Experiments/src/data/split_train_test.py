@@ -43,20 +43,42 @@ def split_data():
     )
     assert os.path.isdir(alldata_img_path), f"Need valid data path as `root`. Got {alldata_img_path}"
 
-    acc = 0
+
     split_dfs = [ 
         pd.DataFrame(columns=alldata_csv_df.columns)
         for _ in range(len(SPLIT_RATIOS)) 
     ]
     # Split and concatenate for each class
-    for idx, classname in enumerate(alldata_csv_df.columns):
+    for classname in alldata_csv_df.columns:
         
         # get all rows for current class
         class_rows_df = alldata_csv_df.loc[alldata_csv_df[classname]==1.0, :]
+        num_rows = len(class_rows_df)
        
         # make all the splits
+        for idx, ratio in enumerate(SPLIT_RATIOS):
 
-    print(acc)
+            # sample rows randomly, and append to split
+            rows_for_split = class_rows_df.sample(
+                n = int(num_rows * ratio)
+            )
+            split_dfs[idx] = split_dfs[idx].append(
+                rows_for_split, 
+                ignore_index=True
+            )
+            
+            # drop split rows from main df
+            alldata_csv_df = alldata_csv_df.drop(rows_for_split.index)
+
+    # Save split dataframes
+    for idx, name in enumerate(SPLIT_CSV_NAMES):
+        split_dfs[idx].to_csv(
+            os.path.join(
+                config.csv_root_path,
+                name
+            )
+        )
+
 
     num_classes = len(class_id_map)
     class_names = list(class_id_map.keys())
