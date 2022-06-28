@@ -112,7 +112,6 @@ def run_concrete_test_loop(config, test_dataloader, model):
 
         test_iter = iter(test_dataloader)
         for batch in tqdm(test_iter):
-            print("BATCH", batch)
             x, y = batch
             x, y = x.to(device), y.to(device)
 

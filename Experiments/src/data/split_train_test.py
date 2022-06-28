@@ -81,6 +81,9 @@ def split_data():
             index=False
         )
         print(f"Dataframe with {len(split_dfs[idx])} images saved, for split name {name}")
+    
+    # Save the modified original df
+    alldata_csv_df.to_csv(alldata_csv_path, index=False)
 
     
     # Move corresponding data for splits
