@@ -32,7 +32,7 @@ class ExhaustiveBatchSampler(object):
         """
 
         super(ExhaustiveBatchSampler, self).__init__()
-        self.labels = labels
+        self.labels = np.array(labels)
         self.classes_per_it = classes_per_it
         self.support_per_class = num_support
         self.iterations = len(self.labels)  # 1-query per iteration, cover all data-pts
@@ -41,8 +41,8 @@ class ExhaustiveBatchSampler(object):
         # Stores all class indices in order (0, 1, .., n)
         self.classes = torch.LongTensor(range(len(self.class_names)))
         self.counts = [ 
-            np.count_nonzero(self.labels==class_idx) 
-            for class_idx in len(self.classes) 
+            np.count_nonzero(self.labels==class_idx.item()) 
+            for class_idx in self.classes
         ] 
 
         # - Create a matrix, indexes, of dim: classes -by- max-elems-per-class
@@ -59,7 +59,6 @@ class ExhaustiveBatchSampler(object):
         # - For every class c, fill the corresponding row with the indices of samples belonging to c
         #   `numel_per_class` stores the number of samples for each class/row
         for idx, label in enumerate(self.labels):
-            
             sample_idx = np.argwhere(self.classes == label).item()
             self.indexes[
                 sample_idx, 
@@ -70,6 +69,8 @@ class ExhaustiveBatchSampler(object):
 
             # update num_elem_per_class
             self.numel_per_class[sample_idx] += 1
+        print(self.indexes)
+        print(self.numel_per_class)
             
 
     def __iter__(self):
@@ -85,11 +86,14 @@ class ExhaustiveBatchSampler(object):
         for query_label in range(self.indexes.size(dim=0)):
 
             for query_sample_idx in range(self.indexes.size(dim=1)):
-                if query_sample_idx.isnan():
+                
+                query_idx = self.indexes[query_label][query_sample_idx].item() 
+                print(query_idx)               
+                if query_sample_idx:
                     # Exhausted all labels in the class
                     break
-                
-                query_idx = self.indexes[query_label][query_sample_idx]
+                else:
+                    query_idx = int(query_idx)
 
                 # Sample classes for the support set
                 class_pool = [
@@ -98,13 +102,13 @@ class ExhaustiveBatchSampler(object):
                 ]
                 c_idxs = np.append(
                     np.random.permutation(class_pool)[:cpi-1],
-                    class_idx 
+                    query_label
                 )
 
                 # Prepare batch
                 batch_size = (spc * cpi) + 1  # (support + 1 query per iteration
                 batch = torch.LongTensor(batch_size)
-                for class_label in c_idxs:
+                for i, class_label in enumerate(c_idxs):
 
                     s = slice(i*spc, (i+1)*spc)
                     
