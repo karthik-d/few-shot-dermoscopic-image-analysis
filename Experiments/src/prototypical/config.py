@@ -28,7 +28,8 @@ config.update(
         num_query_tr = 10,    
         classes_per_it_val = 2,
         num_support_val = 3,  # 3-shot testing
-        num_query_val = 10,   
+        num_query_val = 10,
+        num_support_test = 3   
         manual_seed = 7,
         cuda = True
     )

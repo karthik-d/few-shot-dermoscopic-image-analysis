@@ -1,6 +1,6 @@
 from architectures.metaderm import MetaDerm
 from architectures.protonet import ProtoNet
-from .prototypical_batch_sampler import PrototypicalBatchSampler
+from .prototypical_batch_sampler import ExhaustiveBatchSampler
 from .prototypical_loss import prototypical_loss as loss_fn
 from . import transforms
 #from omniglot_dataset import OmniglotDataset
@@ -53,12 +53,13 @@ def init_sampler(config, labels, mode):
         classes_per_it = config.classes_per_it_val
         num_samples = config.num_support_val + config.num_query_val
 
-    # Initialize and return the batch sampler
-    return PrototypicalBatchSampler(
+    # Initialize and return the batch sampler 
+    # exhaustively makes 1 query per iteration
+    return ExhaustiveBatchSampler(
+        class_names=dataset.class_names
         labels=labels,
         classes_per_it=classes_per_it,
-        num_samples=num_samples,
-        iterations=config.iterations
+        num_support=config.num_support_test    
     )
 
 
@@ -116,6 +117,7 @@ def run_concrete_test_loop(config, test_dataloader, model):
             x, y = x.to(device), y.to(device)
 
             model_output = model(x)
+            # Apply FSL on the extracted features
             _, acc = loss_fn(
                 model_output, 
                 target=y,
