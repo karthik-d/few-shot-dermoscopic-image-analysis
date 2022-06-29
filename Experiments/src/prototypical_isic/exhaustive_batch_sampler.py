@@ -84,13 +84,12 @@ class ExhaustiveBatchSampler(object):
         # Iterate over `self.indexes` to get each sample
         for query_label in range(self.indexes.size(dim=0)):
 
-            for sample_idx in range(self.indexes.size(dim=1)):
-
-                if sample_idx.isnan():
+            for query_sample_idx in range(self.indexes.size(dim=1)):
+                if query_sample_idx.isnan():
                     # Exhausted all labels in the class
                     break
                 
-                query_idx = self.indexes[query_label][sample_idx]
+                query_idx = self.indexes[query_label][query_sample_idx]
 
                 # Sample classes for the support set
                 class_pool = [
@@ -101,37 +100,40 @@ class ExhaustiveBatchSampler(object):
                     np.random.permutation(class_pool)[:cpi-1],
                     class_idx 
                 )
+
+                # Prepare batch
+                batch_size = (spc * cpi) + 1  # (support + 1 query per iteration
+                batch = torch.LongTensor(batch_size)
                 for class_label in c_idxs:
 
-
-
-        for query_idx in range(self.iterations):
-            
-            batch_size = spc * cpi
-            batch = torch.LongTensor(batch_size)
-
-            # Get randomly sampled indices for classes
-            c_idxs = torch.randperm(len(self.classes))[:cpi-1]
-            for sample_idx, c in enumerate(self.classes):
-                
-                s = slice(i * spc, (i + 1) * spc)
-
-                # Randomly sample samples for the class
-                # Replicate sampling if class does NOT have sufficient samples
-                sample_idxs = torch.empty(0, dtype=torch.int8)
-                while(len(sample_idxs)!=spc):
-                    remain = spc - len(sample_idxs)
-                    sample_idxs = torch.cat([
-                        sample_idxs,
-                        torch.randperm(
-                            self.numel_per_class[sample_idx]
+                    s = slice(i*spc, (i+1)*spc)
+                    
+                    # Randomly sample samples for the class
+                    # Replicate sampling if class does NOT have sufficient samples
+                    sample_idxs = torch.empty(0, dtype=torch.int8)
+                    while(len(sample_idxs)!=spc):
+                        
+                        remain = spc - len(sample_idxs)
+                        curr_sample_idxs = torch.randperm(
+                            self.numel_per_class[class_label]
                         )[:min(remain, spc)]
-                    ])
-                batch[s] = self.indexes[sample_idx][sample_idxs]
 
-            # Construct batch - shuffle the generated batches
-            batch = batch[torch.randperm(len(batch))]
-            yield batch
+                        # Skip if query is sampled into support
+                        if(query_idx in sample_idxs):
+                            continue
+
+                        sample_idxs = torch.cat([
+                            sample_idxs,
+                            curr_sample_idxs
+                        ])
+
+                        # Prepare current class in batch
+                        batch[s] = self.indexes[class_label][sample_idxs]        
+
+                # Construct batch - shuffle the generated batch - add query as last element
+                batch = batch[torch.randperm(len(batch))]
+                batch[-1] = query_idx
+                yield batch
 
     
     def __len__(self):
