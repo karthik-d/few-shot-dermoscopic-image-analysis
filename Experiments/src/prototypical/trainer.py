@@ -1,7 +1,7 @@
 from architectures.metaderm import MetaDerm
 from architectures.protonet import ProtoNet
 from .prototypical_batch_sampler import PrototypicalBatchSampler
-from .prototypical_loss import prototypical_loss as loss_fn
+from .prototypical_loss import get_prototypical_loss_fn
 from . import transforms
 #from omniglot_dataset import OmniglotDataset
 
@@ -48,16 +48,19 @@ def init_sampler(config, labels, mode):
 
     if mode == 'train':
         classes_per_it = config.classes_per_it_tr
-        num_samples = config.num_support_tr + config.num_query_tr
+        num_support = config.num_support_tr 
+        num_query = config.num_query_tr
     else:
         classes_per_it = config.classes_per_it_val
-        num_samples = config.num_support_val + config.num_query_val
+        num_support = config.num_support_val 
+        num_query = config.num_query_val
 
     # Initialize and return the batch sampler
     return PrototypicalBatchSampler(
         labels=labels,
         classes_per_it=classes_per_it,
-        num_samples=num_samples,
+        num_support=num_support,
+        num_query=num_query,
         iterations=config.iterations
     )
 
@@ -72,8 +75,14 @@ def init_dataloader(config, data_config, mode):
     return torch.utils.data.DataLoader(
         dataset, 
         batch_sampler=sampler
-    )
+    ), sampler
 
+
+def init_loss_fn(sampler):
+    
+    # bind sampler and return loss function
+    return get_prototypical_loss_fn(sampler=sampler)
+    
 
 def init_protonet(config):
     
@@ -114,7 +123,16 @@ def init_lr_scheduler(config, optim):
     )
 
 
-def run_concrete_train_loop(config, tr_dataloader, model, optim, lr_scheduler, val_dataloader=None):
+def run_concrete_train_loop(
+    config, 
+    tr_dataloader,
+    tr_loss_fn, 
+    model, 
+    optim, 
+    lr_scheduler, 
+    val_dataloader=None,
+    val_loss_fn=None
+):
     
     """ 
     Run the concrete training loop on the model 
@@ -160,7 +178,7 @@ def run_concrete_train_loop(config, tr_dataloader, model, optim, lr_scheduler, v
             x, y = x.to(device), y.to(device)
             
             model_output = model(x)
-            loss, acc = loss_fn(
+            loss, acc = tr_loss_fn(
                 model_output, 
                 target=y,
                 n_support=config.num_support_tr
@@ -179,7 +197,7 @@ def run_concrete_train_loop(config, tr_dataloader, model, optim, lr_scheduler, v
         print(f'Avg Train Loss: {avg_loss}, Avg Train Acc: {avg_acc}')
         lr_scheduler.step()
 
-        if val_dataloader is None:
+        if val_dataloader is None or val_loss_fn is None:
             continue
 
         val_iter = iter(val_dataloader)
@@ -193,7 +211,7 @@ def run_concrete_train_loop(config, tr_dataloader, model, optim, lr_scheduler, v
             x, y = x.to(device), y.to(device)
 
             model_output = model(x)
-            loss, acc = loss_fn(
+            loss, acc = val_loss_fn(
                 model_output, 
                 target=y,
                 n_support=config.num_support_val
@@ -232,6 +250,8 @@ def run_concrete_train_loop(config, tr_dataloader, model, optim, lr_scheduler, v
     return best_state, best_acc, train_loss, train_acc, val_loss, val_acc
 
 
+# TODO: Change to `validate` to run only the  validation loop;
+# TODO: Plug into the training loop
 def run_concrete_test_loop(config, test_dataloader, model):
     
     """ 
@@ -265,6 +285,8 @@ def run_concrete_test_loop(config, test_dataloader, model):
     return avg_acc
 
 
+# TODO: Change to `validate` to run only the  validation loop;
+# TODO: Plug into the training loop
 def test():
     
     """
@@ -314,15 +336,22 @@ def train():
 
     init_seed(config)
 
-    tr_dataloader = init_dataloader(
+    tr_dataloader, tr_sampler = init_dataloader(
         config=config, 
         data_config=data_config,
         mode='train'
     )
-    val_dataloader = init_dataloader(
+    val_dataloader, val_sampler = init_dataloader(
         config=config, 
         data_config=data_config,
         mode='val'
+    )
+
+    tr_loss_fn = init_loss_fn(
+        sampler=tr_sampler
+    )
+    val_loss_fn = init_loss_fn(
+        sampler=val_sampler
     )
 
     model = init_metaderm(config)
@@ -332,6 +361,8 @@ def train():
         config=config,
         tr_dataloader=tr_dataloader,
         val_dataloader=val_dataloader,
+        tr_loss_fn=tr_loss_fn,
+        val_loss_fn=val_loss_fn,
         model=model,
         optim=optim,
         lr_scheduler=lr_scheduler
