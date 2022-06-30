@@ -110,7 +110,7 @@ class PrototypicalBatchSampler(object):
     def decode_batch(self, batch_labels, batch_classes):
 
         """ 
-        Returns the number and indexes of support and query sets
+        Returns the indexes of support and query sets for each class
         """
 
         support_idxs = [

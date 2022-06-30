@@ -64,7 +64,6 @@ def prototypical_loss(input, target, n_support):
     # FIXME when torch will support where as np
     # assuming n_query, n_target constants
     n_query = target_cpu.eq(classes[0].item()).sum().item() - n_support
-    print(n_query)
 
     support_idxs = list(map(supp_idxs, classes))
 

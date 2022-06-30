@@ -61,19 +61,20 @@ def get_prototypical_loss_fn(sampler):
 
         (support_idxs, query_idxs) = sampler.decode_batch(
             batch_labels=target_cpu, 
-            batch_classes=classes)
-        print(support_idxs, query_idxs)
-        n_support = len(support_idxs)
-        n_query = len(query_idxs)
+            batch_classes=classes
+        )
+        n_support = len(support_idxs[0])
+        n_query = len(query_idxs[0])
 
         prototypes = torch.stack([
             input_cpu[idx_list].mean(0) 
             for idx_list in support_idxs
         ])
+        
+        query_idxs = torch.stack(query_idxs).view(-1)
         query_samples = input_cpu[query_idxs]
 
         dists = PrototypicalLoss.euclidean_dist(query_samples, prototypes)
-
         log_p_y = F.log_softmax(-dists, dim=1).view(n_classes, n_query, -1)
 
         target_inds = torch.arange(0, n_classes)

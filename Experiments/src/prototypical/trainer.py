@@ -2,6 +2,7 @@ from architectures.metaderm import MetaDerm
 from architectures.protonet import ProtoNet
 from .prototypical_batch_sampler import PrototypicalBatchSampler
 from .prototypical_loss import get_prototypical_loss_fn
+from prototypical_isic.prototypical_loss import prototypical_loss as loss_fn
 from . import transforms
 #from omniglot_dataset import OmniglotDataset
 
