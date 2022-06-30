@@ -82,7 +82,7 @@ def init_loss_fn(sampler):
     
     # bind sampler and return loss function
     return get_prototypical_loss_fn(sampler=sampler)
-    
+
 
 def init_protonet(config):
     
@@ -180,8 +180,7 @@ def run_concrete_train_loop(
             model_output = model(x)
             loss, acc = tr_loss_fn(
                 model_output, 
-                target=y,
-                n_support=config.num_support_tr
+                target=y
             )
             
             loss.backward()
@@ -213,8 +212,7 @@ def run_concrete_train_loop(
             model_output = model(x)
             loss, acc = val_loss_fn(
                 model_output, 
-                target=y,
-                n_support=config.num_support_val
+                target=y
             )
                 
             val_loss.append(loss.item())

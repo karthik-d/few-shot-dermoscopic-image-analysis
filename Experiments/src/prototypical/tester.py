@@ -1,7 +1,7 @@
 from architectures.metaderm import MetaDerm
 from architectures.protonet import ProtoNet
 from .exhaustive_batch_sampler import ExhaustiveBatchSampler
-from .prototypical_loss import prototypical_loss as loss_fn
+from .prototypical_loss import get_prototypical_loss_fn
 from . import transforms
 #from omniglot_dataset import OmniglotDataset
 
@@ -74,6 +74,12 @@ def init_dataloader(config, data_config, mode):
         dataset, 
         batch_sampler=sampler
     )
+
+
+def init_loss_fn(sampler):
+    
+    # bind sampler and return loss function
+    return get_prototypical_loss_fn(sampler=sampler)
 
 
 def init_protonet(config):

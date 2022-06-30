@@ -31,9 +31,9 @@ class PrototypicalBatchSampler(object):
         super(PrototypicalBatchSampler, self).__init__()
         self.labels = labels
         self.classes_per_it = classes_per_it
-        self.num_support = num_support 
-        self.num_query = num_query
-        self.sample_per_class = self.num_support + self.num_query 
+        self.n_support = num_support 
+        self.n_query = num_query
+        self.sample_per_class = self.n_support + self.n_query 
         self.iterations = iterations
 
         self.classes, self.counts = np.unique(self.labels, return_counts=True)
@@ -107,20 +107,20 @@ class PrototypicalBatchSampler(object):
             yield batch
 
 
-    def decode_batch(self, batch_targets, batch_classes):
+    def decode_batch(self, batch_labels, batch_classes):
 
         """ 
         Returns the number and indexes of support and query sets
         """
 
         support_idxs = [
-            batch_targets.eq(c).nonzero()[:self.n_support].squeeze(1)
-            for c in self.batch_classes
+            batch_labels.eq(c).nonzero()[:self.n_support].squeeze(1)
+            for c in batch_classes
         ]
 
         query_idxs = [
-            batch_targets.eq(c).nonzero()[self.n_support:].squeeze(1)
-            for c in self.batch_classes
+            batch_labels.eq(c).nonzero()[self.n_support:].squeeze(1)
+            for c in batch_classes
         ]
 
         return support_idxs, query_idxs

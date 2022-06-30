@@ -87,7 +87,7 @@ def get_prototypical_loss_fn(sampler):
         return loss_val,  acc_val
 
     # Return wrapped loss function, with sampler bound
-    return prototypical_loss
+    return compute_loss
 
         
 
