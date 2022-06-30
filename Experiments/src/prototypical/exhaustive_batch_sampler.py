@@ -110,7 +110,7 @@ class ExhaustiveBatchSampler(object):
                     s = slice(i*spc, (i+1)*spc)                    
                     # Randomly sample samples for the class
                     # Replicate sampling if class does NOT have sufficient samples
-                    sample_idxs = torch.empty(0, dtype=torch.int8)
+                    sample_idxs = torch.empty(0, dtype=torch.long)
                     while(len(sample_idxs)!=spc):
                         
                         remain = spc - len(sample_idxs)
@@ -119,6 +119,8 @@ class ExhaustiveBatchSampler(object):
                         )[:min(remain, spc)]
 
                         # Skip if query is sampled into support
+                        print("-->", query_idx)
+                        print(sample_idxs)
                         if(query_idx in sample_idxs):
                             continue
 
@@ -145,8 +147,18 @@ class ExhaustiveBatchSampler(object):
         """
 
         # Last element is query, rest are support
-        support_idxs = list(range(len(batch_labels)-1))
-        query_idxs = [ len(batch_labels)-1 ]
+        support_idxs = [
+            batch_labels[:-1].eq(c).nonzero().squeeze(1)
+            for c in batch_classes
+        ]
+
+        query_idxs = [ torch.tensor([len(batch_labels)-1]) ]
+        # query_idxs = list(map(
+        #     lambda c: torch.tensor([
+        #         (len(batch_labels)-1 if batch_labels[-1]==c else torch.nan)
+        #     ]),
+        #     batch_classes 
+        # ))
 
         return support_idxs, query_idxs
 

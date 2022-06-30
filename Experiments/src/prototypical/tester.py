@@ -73,7 +73,7 @@ def init_dataloader(config, data_config, mode):
     return torch.utils.data.DataLoader(
         dataset, 
         batch_sampler=sampler
-    )
+    ), sampler
 
 
 def init_loss_fn(sampler):
@@ -105,7 +105,7 @@ def init_metaderm(config):
 
 
 
-def run_concrete_test_loop(config, test_dataloader, model):
+def run_concrete_test_loop(config, test_dataloader, loss_fn, model):
     
     """ 
     Run a trained model through the test dataset
@@ -126,8 +126,7 @@ def run_concrete_test_loop(config, test_dataloader, model):
             # Apply FSL on the extracted features
             _, acc = loss_fn(
                 model_output, 
-                target=y,
-                n_support=config.num_support_val
+                target=y
             )
             avg_acc.append(acc.item())
     
@@ -136,6 +135,7 @@ def run_concrete_test_loop(config, test_dataloader, model):
     print(f'Test Acc: {avg_acc}')
 
     return avg_acc
+
 
 # TODO: Produce DOCKER file for submission to ISIC Challenge Website
 def test():
@@ -150,11 +150,13 @@ def test():
 
     # load dataset
     init_seed(config)
-    test_dataloader = init_dataloader(
+    test_dataloader, sampler = init_dataloader(
         config=config, 
         data_config=data_config, 
         mode='test'
     )
+
+    loss_fn = get_prototypical_loss_fn(sampler)
 
     # load model
     model = init_metaderm(config)
@@ -168,6 +170,7 @@ def test():
     run_concrete_test_loop(
         config=config,
         test_dataloader=test_dataloader,
+        loss_fn=loss_fn,
         model=model
     )
 

@@ -71,23 +71,32 @@ def get_prototypical_loss_fn(sampler):
             for idx_list in support_idxs
         ])
         
-        print(query_idxs)
-        print(support_idxs)
+        # print(query_idxs)
+        # print(support_idxs)
 
-        query_idxs = torch.stack(query_idxs).view(-1)
+        query_idxs = torch.stack(query_idxs).view(-1).long()
         query_samples = input_cpu[query_idxs]
+        query_classes = torch.unique(target_cpu[query_idxs])
+        n_query_classes = query_classes.size(0)
 
         dists = PrototypicalLoss.euclidean_dist(query_samples, prototypes)
         log_p_y = F.log_softmax(-dists, dim=1).view(n_classes, n_query, -1)
 
-        target_inds = torch.arange(0, n_classes)
-        target_inds = target_inds.view(n_classes, 1, 1)
-        target_inds = target_inds.expand(n_classes, n_query, 1).long()
+        # target_inds = torch.arange(0, n_query_classes)
+        print(target_inds)
+        target_inds = torch.tensor(list(range(len(list(filter(
+            lambda c: c in query_classes,
+            range(n_classes)
+        ))))))
+        target_inds = target_inds.view(n_query_classes, 1, 1)
+        target_inds = target_inds.expand(n_query_classes, n_query, 1).long()
 
+        print(target_inds)
         loss_val = -log_p_y.gather(2, target_inds).squeeze().view(-1).mean()
+        print(-log_p_y.gather(2, target_inds).squeeze())
         _, y_hat = log_p_y.max(2)
         acc_val = y_hat.eq(target_inds.squeeze(2)).float().mean()
-
+        print(loss_val, acc_val)
         return loss_val,  acc_val
 
     # Return wrapped loss function, with sampler bound
