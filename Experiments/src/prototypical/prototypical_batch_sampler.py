@@ -15,7 +15,7 @@ class PrototypicalBatchSampler(object):
     NOTE: __len__ returns the number of episodes per epoch
     """
 
-    def __init__(self, labels, classes_per_it, num_samples, iterations):
+    def __init__(self, labels, classes_per_it, num_support, num_query, iterations):
         
         """
         Initialize the PrototypicalBatchSampler object
@@ -31,7 +31,9 @@ class PrototypicalBatchSampler(object):
         super(PrototypicalBatchSampler, self).__init__()
         self.labels = labels
         self.classes_per_it = classes_per_it
-        self.sample_per_class = num_samples
+        self.num_support = num_support 
+        self.num_query = num_query
+        self.sample_per_class = self.num_support + self.num_query 
         self.iterations = iterations
 
         self.classes, self.counts = np.unique(self.labels, return_counts=True)
@@ -103,6 +105,25 @@ class PrototypicalBatchSampler(object):
             # Construct batch
             batch = batch[torch.randperm(len(batch))]
             yield batch
+
+
+    def decode_batch(self, batch_targets, batch_classes):
+
+        """ 
+        Returns the number and indexes of support and query sets
+        """
+
+        support_idxs = [
+            batch_targets.eq(c).nonzero()[:self.n_support].squeeze(1)
+            for c in self.batch_classes
+        ]
+
+        query_idxs = [
+            batch_targets.eq(c).nonzero()[self.n_support:].squeeze(1)
+            for c in self.batch_classes
+        ]
+
+        return support_idxs, query_idxs
 
     
     def __len__(self):
