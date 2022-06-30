@@ -4,6 +4,7 @@ from torch.nn.modules import Module
 
 
 class PrototypicalLoss(Module):
+
     '''
     Loss class deriving from Module for the prototypical loss function defined below
     '''
@@ -77,7 +78,7 @@ def get_prototypical_loss_fn(sampler):
         n_query_classes = query_classes.size(0)
 
         dists = PrototypicalLoss.euclidean_dist(query_samples, prototypes)
-        log_p_y = F.log_softmax(-dists, dim=1).view(n_classes, n_query, -1)
+        log_p_y = F.log_softmax(-dists, dim=1).view(n_query_classes, n_query, -1)
 
         target_inds = torch.tensor(list(range(len(query_classes))))
         target_inds = target_inds.view(n_query_classes, 1, 1)
@@ -85,6 +86,10 @@ def get_prototypical_loss_fn(sampler):
 
         loss_val = -log_p_y.gather(2, target_inds).squeeze().view(-1).mean()
         _, y_hat = log_p_y.max(2)
+        print("Target", target_inds)
+        print(y_hat)
+        print(log_p_y)
+
         acc_val = y_hat.eq(target_inds.squeeze(2)).float().mean()
 
         return loss_val,  acc_val
