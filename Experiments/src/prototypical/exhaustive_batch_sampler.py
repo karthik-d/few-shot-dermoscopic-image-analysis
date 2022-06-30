@@ -85,12 +85,12 @@ class ExhaustiveBatchSampler(object):
 
             for query_sample_idx in range(self.indexes.size(dim=1)):
                 
-                query_idx = self.indexes[query_label][query_sample_idx].item()              
-                if query_sample_idx:
+                query_idx = self.indexes[query_label][query_sample_idx]       
+                if torch.isnan(query_idx):
                     # Exhausted all labels in the class
                     break
                 else:
-                    query_idx = int(query_idx)
+                    query_idx = int(query_idx.item())
 
                 # Sample classes for the support set
                 class_pool = [
@@ -119,8 +119,6 @@ class ExhaustiveBatchSampler(object):
                         )[:min(remain, spc)]
 
                         # Skip if query is sampled into support
-                        print("-->", query_idx)
-                        print(sample_idxs)
                         if(query_idx in sample_idxs):
                             continue
 
@@ -140,6 +138,7 @@ class ExhaustiveBatchSampler(object):
                 ))
                 yield batch
 
+
     def decode_batch(self, batch_labels, batch_classes):
 
         """ 
@@ -153,13 +152,6 @@ class ExhaustiveBatchSampler(object):
         ]
 
         query_idxs = [ torch.tensor([len(batch_labels)-1]) ]
-        # query_idxs = list(map(
-        #     lambda c: torch.tensor([
-        #         (len(batch_labels)-1 if batch_labels[-1]==c else torch.nan)
-        #     ]),
-        #     batch_classes 
-        # ))
-
         return support_idxs, query_idxs
 
     
