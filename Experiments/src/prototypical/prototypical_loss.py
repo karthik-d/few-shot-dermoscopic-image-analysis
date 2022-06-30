@@ -38,7 +38,7 @@ class PrototypicalLoss(Module):
 
 def get_prototypical_loss_fn(sampler):
 
-    def compute_loss(input, target):
+    def compute_loss(input, target, get_prediction_results=False):
 
         """
         Compute the barycentres by averaging the features of n_support
@@ -50,7 +50,8 @@ def get_prototypical_loss_fn(sampler):
         Args:
         - input: the model output for a batch of samples
         - target: ground truth for the above batch of samples
-        - n_support: number of samples to keep in account when computing
+        - get_prediction_results: If True, a third return value corresponds to 
+                                    (predicted_labels, actual_labels) for each query
         barycentres, for each one of the current classes
         """
 
@@ -80,19 +81,22 @@ def get_prototypical_loss_fn(sampler):
         dists = PrototypicalLoss.euclidean_dist(query_samples, prototypes)
         log_p_y = F.log_softmax(-dists, dim=1).view(n_query_classes, n_query, -1)
 
-        target_inds = torch.tensor(list(range(len(query_classes))))
+        target_inds = torch.tensor(list(range(n_query_classes)))
         target_inds = target_inds.view(n_query_classes, 1, 1)
         target_inds = target_inds.expand(n_query_classes, n_query, 1).long()
 
+        # The relative ordering of `target_inds` and `log_p_y` classes must be consistent
+        # i.e. log_p_y has the clases in same order in both 2nd and 3rd dimensions
         loss_val = -log_p_y.gather(2, target_inds).squeeze().view(-1).mean()
         _, y_hat = log_p_y.max(2)
-        print("Target", target_inds)
-        print(y_hat)
-        print(log_p_y)
-
         acc_val = y_hat.eq(target_inds.squeeze(2)).float().mean()
 
-        return loss_val,  acc_val
+        if not get_prediction_results:
+            return loss_val,  acc_val
+        else:
+            predicted_labels = classes[y_hat.squeeze()].flatten()
+            actual_labels = classes[target_inds.squeeze()].flatten()
+            return loss_val, acc_val, (predicted_labels, actual_labels)
 
     # Return wrapped loss function, with sampler bound
     return compute_loss

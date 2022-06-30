@@ -181,7 +181,8 @@ def run_concrete_train_loop(
             model_output = model(x)
             loss, acc = tr_loss_fn(
                 model_output, 
-                target=y
+                target=y,
+                get_prediction_results=True
             )
             
             loss.backward()

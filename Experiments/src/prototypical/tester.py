@@ -117,6 +117,8 @@ def run_concrete_test_loop(config, test_dataloader, loss_fn, model):
     # Test as average of 5 iterations
     for epoch in range(1):
 
+        all_predictions = torch.tensor([], dtype=torch.long)
+        all_truths = torch.tensor([], dtype=torch.long)
         test_iter = iter(test_dataloader)
         for batch in tqdm(test_iter):
             x, y = batch
@@ -124,11 +126,24 @@ def run_concrete_test_loop(config, test_dataloader, loss_fn, model):
 
             model_output = model(x)
             # Apply FSL on the extracted features
-            _, acc = loss_fn(
+            _, acc, (predictions, truths) = loss_fn(
                 model_output, 
-                target=y
+                target=y,
+                get_prediction_results=True
             )
             avg_acc.append(acc.item())
+
+            # gather predictions
+            all_predictions = torch.cat([
+                all_predictions,
+                predictions
+            ])
+
+            # gather truths
+            all_truths = torch.cat([
+                all_truths,
+                truths
+            ])
     
     # Compute average stats
     avg_acc = np.mean(avg_acc)
