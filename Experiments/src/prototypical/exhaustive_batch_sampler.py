@@ -138,6 +138,18 @@ class ExhaustiveBatchSampler(object):
                 ))
                 yield batch
 
+    def decode_batch(self, batch_labels, batch_classes):
+
+        """ 
+        Returns the indexes of support and query sets for each class
+        """
+
+        # Last element is query, rest are support
+        support_idxs = list(range(len(batch_labels)-1))
+        query_idxs = [ len(batch_labels)-1 ]
+
+        return support_idxs, query_idxs
+
     
     def __len__(self):
         

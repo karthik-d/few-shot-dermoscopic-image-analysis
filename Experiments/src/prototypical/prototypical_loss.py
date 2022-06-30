@@ -71,6 +71,9 @@ def get_prototypical_loss_fn(sampler):
             for idx_list in support_idxs
         ])
         
+        print(query_idxs)
+        print(support_idxs)
+
         query_idxs = torch.stack(query_idxs).view(-1)
         query_samples = input_cpu[query_idxs]
 
