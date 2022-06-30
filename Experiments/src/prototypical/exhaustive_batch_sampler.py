@@ -69,8 +69,6 @@ class ExhaustiveBatchSampler(object):
 
             # update num_elem_per_class
             self.numel_per_class[sample_idx] += 1
-        print(self.indexes)
-        print(self.numel_per_class)
             
 
     def __iter__(self):
@@ -87,8 +85,7 @@ class ExhaustiveBatchSampler(object):
 
             for query_sample_idx in range(self.indexes.size(dim=1)):
                 
-                query_idx = self.indexes[query_label][query_sample_idx].item() 
-                print(query_idx)               
+                query_idx = self.indexes[query_label][query_sample_idx].item()              
                 if query_sample_idx:
                     # Exhausted all labels in the class
                     break
@@ -110,8 +107,7 @@ class ExhaustiveBatchSampler(object):
                 batch = torch.LongTensor(batch_size)
                 for i, class_label in enumerate(c_idxs):
 
-                    s = slice(i*spc, (i+1)*spc)
-                    
+                    s = slice(i*spc, (i+1)*spc)                    
                     # Randomly sample samples for the class
                     # Replicate sampling if class does NOT have sufficient samples
                     sample_idxs = torch.empty(0, dtype=torch.int8)
@@ -131,12 +127,15 @@ class ExhaustiveBatchSampler(object):
                             curr_sample_idxs
                         ])
 
-                        # Prepare current class in batch
-                        batch[s] = self.indexes[class_label][sample_idxs]        
+                    # Prepare current class in batch
+                    batch[s] = self.indexes[class_label][sample_idxs]        
 
                 # Construct batch - shuffle the generated batch - add query as last element
-                batch = batch[torch.randperm(len(batch))]
-                batch[-1] = query_idx
+                batch = batch[torch.randperm(batch_size-1)]
+                batch = torch.cat((
+                    batch, 
+                    torch.tensor([query_idx], dtype=torch.long)
+                ))
                 yield batch
 
     
