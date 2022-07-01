@@ -8,7 +8,7 @@ from . import transforms
 from prototypical.config import config
 from data.config import config as data_config
 from data.ISIC18_T3_Dataset import ISIC18_T3_Dataset
-from utils import helpers
+from utils import helpers, displayers
 
 from tqdm import tqdm
 from torch.utils.data import DataLoader
@@ -73,7 +73,7 @@ def init_dataloader(config, data_config, mode):
     return torch.utils.data.DataLoader(
         dataset, 
         batch_sampler=sampler
-    ), sampler
+    ), dataset, sampler
 
 
 def init_loss_fn(sampler):
@@ -105,7 +105,7 @@ def init_metaderm(config):
 
 
 
-def run_concrete_test_loop(config, test_dataloader, loss_fn, model):
+def run_concrete_test_loop(config, test_dataloader, loss_fn, model, dataset):
     
     """ 
     Run a trained model through the test dataset
@@ -115,7 +115,7 @@ def run_concrete_test_loop(config, test_dataloader, loss_fn, model):
     avg_acc = []
 
     # Test as average of 5 iterations
-    for epoch in range(1):
+    for epoch in range(5):
 
         all_predictions = torch.tensor([], dtype=torch.long)
         all_truths = torch.tensor([], dtype=torch.long)
@@ -144,10 +144,21 @@ def run_concrete_test_loop(config, test_dataloader, loss_fn, model):
                 all_truths,
                 truths
             ])
+
+        confusion_matrix = displayers.get_printable_confusion_matrix(
+            all_labels=all_truths,
+            all_predictions=all_predictions,
+            classes=dataset.class_names
+        )
+        print("\nClassification Confusion Matrix\n")
+        print(confusion_matrix)
+
+        avg_acc_val = np.mean(avg_acc)
+        print(f'\nAverage Test Acc: {avg_acc_val}')
     
     # Compute average stats
-    avg_acc = np.mean(avg_acc)
-    print(f'Test Acc: {avg_acc}')
+    avg_acc_val = np.mean(avg_acc)
+    print(f'\nAverage Test Acc: {avg_acc_val}')
 
     return avg_acc
 
@@ -165,7 +176,7 @@ def test():
 
     # load dataset
     init_seed(config)
-    test_dataloader, sampler = init_dataloader(
+    test_dataloader, test_dataset, sampler = init_dataloader(
         config=config, 
         data_config=data_config, 
         mode='test'
@@ -186,6 +197,7 @@ def test():
         config=config,
         test_dataloader=test_dataloader,
         loss_fn=loss_fn,
-        model=model
+        model=model,
+        dataset=test_dataset
     )
 
