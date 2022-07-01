@@ -38,7 +38,6 @@ def get_printable_confusion_matrix(
     confusion_matrix = pd.crosstab(
         index=truth, 
         columns=prediction, 
-        normalize="index", 
         dropna=False
     )
     confusion_matrix.style.hide(axis='index')
