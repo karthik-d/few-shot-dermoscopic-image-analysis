@@ -6,8 +6,9 @@ from prototypical import trainer, tester
 from data import split_train_test
 
 # trainer.train()
-tester.test()
+# tester.test()
 
-# split_train_test.split_data()
+# split_train_test.split_data_all_classes()
+split_train_test.split_test_classes()
 
 # run()

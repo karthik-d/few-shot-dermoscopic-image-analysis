@@ -25,7 +25,7 @@ DATA_EXTN = "jpg"
 assert len(SPLIT_RATIOS) == len(SPLIT_DIR_NAMES) == len(SPLIT_CSV_NAMES), "Split parameter lists must be of same length"
 
 
-def split_data():
+def split_data_all_classes():
 
     # Fetch CSV
     alldata_csv_path = os.path.join(
@@ -116,5 +116,93 @@ def split_data():
     print("Images for splits moved")
 
 
+def split_test_classes(
+    test_classes=[
+        'MEL',
+        'NV',
+        'BCC'
+    ],
+    test_dir_name='test'
+):
+
+    """
+    NOTE: Split Ratio and Split Dir Names are Obsolete
+    Removes all test classes into `test` directory
+    """
+
+    # Fetch CSV
+    alldata_csv_path = os.path.join(
+        config.csv_root_path,
+        SRC_CSV_NAME
+    )
+    assert os.path.isfile(alldata_csv_path), f"CSV file was not found at {alldata_csv_path}"
+
+    # Read CSV as Dataframe
+    alldata_csv_df = pd.read_csv(alldata_csv_path)
+
+    # Ensure data path validity
+    alldata_img_path = os.path.join(
+        DATA_ROOT_PATH,
+        SRC_DIR_NAME
+    )
+    assert os.path.isdir(alldata_img_path), f"Need valid data path as `root`. Got {alldata_img_path}"
+
+
+    test_df = pd.DataFrame(columns=alldata_csv_df.columns)
+
+    # Split and concatenate for each class of test set
+    for classname in test_classes:
+        
+        # get all rows for current class
+        class_rows_df = alldata_csv_df.loc[alldata_csv_df[classname]==1.0, :]        
+
+        test_df = test_df.append(
+            class_rows_df,
+            ignore_index=True
+        )
+
+        alldata_csv_df = alldata_csv_df.drop(class_rows_df.index)
+
+    # Save test dataframe
+    test_df.to_csv(
+        os.path.join(
+            config.csv_root_path,
+            test_dir_name
+        ),
+        index=False
+    )
+    print(f"Dataframe with {len(test_df)} images saved, for test split")
+    
+    # Save the modified original df
+    alldata_csv_df.to_csv(alldata_csv_path, index=False)
+
+    
+    # Move corresponding data for test
+
+    # create destination if it doesn't exist
+    destn_path = os.path.join(
+        DATA_ROOT_PATH,
+        test_dir_name
+    )
+    if not os.path.isdir(destn_path):
+        Path(destn_path).mkdir(
+            parents=True,
+            exist_ok=False
+        )
+
+    # move images
+    for img_name in test_df.iloc[:, 0]:
+        os.rename(
+            os.path.join(
+                alldata_img_path,
+                f"{img_name}.{DATA_EXTN}"
+            ),
+            os.path.join(
+                destn_path,
+                f"{img_name}.{DATA_EXTN}"
+            )
+        )
+    
+    print("Images for test, moved")
 
 
