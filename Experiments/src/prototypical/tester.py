@@ -186,8 +186,13 @@ def test():
 
     # load model
     model = init_metaderm(config)
+    # model_path = os.path.join(
+    #     config.logs_path, 
+    #     'best_model.pth'
+    # )
+
     model_path = os.path.join(
-        config.logs_path, 
+        '/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_1',
         'best_model.pth'
     )
     model.load_state_dict(torch.load(model_path))
