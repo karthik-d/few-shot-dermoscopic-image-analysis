@@ -93,9 +93,10 @@ class ExhaustiveBatchSampler(object):
                     query_idx = int(query_idx.item())
 
                 # Sample classes for the support set
+                # Allow only classes with non-zero samples in them
                 class_pool = [
                     idx for idx in self.classes
-                    if idx!=query_label 
+                    if (idx!=query_label and self.numel_per_class[idx]!=0)
                 ]
                 c_idxs = np.append(
                     np.random.permutation(class_pool)[:cpi-1],
