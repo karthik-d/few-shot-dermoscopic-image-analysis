@@ -122,7 +122,8 @@ def split_test_classes(
         'NV',
         'BCC'
     ],
-    test_dir_name='test'
+    test_dir_name='test',
+    test_csv_name='ISIC18_T3_test.csv'
 ):
 
     """
@@ -167,7 +168,7 @@ def split_test_classes(
     test_df.to_csv(
         os.path.join(
             config.csv_root_path,
-            test_dir_name
+            test_csv_name
         ),
         index=False
     )
