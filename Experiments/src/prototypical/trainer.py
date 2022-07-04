@@ -165,7 +165,7 @@ def run_concrete_train_loop(
         pass
 
     for epoch in range(config.epochs):
-        print(f'=== Episode: {epoch} ===')
+        print(f'=== Epoch: {epoch} ===')
 
         tr_iter = iter(tr_dataloader)
         model.train()
@@ -182,7 +182,7 @@ def run_concrete_train_loop(
             loss, acc = tr_loss_fn(
                 model_output, 
                 target=y,
-                get_prediction_results=True
+                get_prediction_results=False
             )
             
             loss.backward()

@@ -27,6 +27,10 @@ assert len(SPLIT_RATIOS) == len(SPLIT_DIR_NAMES) == len(SPLIT_CSV_NAMES), "Split
 
 def split_data_all_classes():
 
+    """
+    NOTE: This function is NOT DETERMINISTIC
+    """
+
     # Fetch CSV
     alldata_csv_path = os.path.join(
         config.csv_root_path,
@@ -129,6 +133,7 @@ def split_test_classes(
     """
     NOTE: Split Ratio and Split Dir Names are Obsolete
     Removes all test classes into `test` directory
+    NOTE: This function is DETERMINISTIC
     """
 
     # Fetch CSV
