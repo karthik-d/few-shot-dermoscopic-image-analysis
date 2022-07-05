@@ -20,7 +20,7 @@ class ExhaustiveExtendedBatchSampler(object):
     NOTE: __len__ returns the number of data_pts contained in the dataset
     """
 
-    def __init__(self, class_names, labels, support_classes, query_classes, classes_per_it, num_support, force_support=None):
+    def __init__(self, class_names, labels, support_class_names, query_class_names, classes_per_it, num_support, force_support=[]):
         
         """
         Initialize the object
@@ -35,17 +35,23 @@ class ExhaustiveExtendedBatchSampler(object):
                         (Requires that size of force_support is lower than `num_support`)
         """
 
-        super(ExhaustiveBatchSampler, self).__init__()
+        super(ExhaustiveExtendedBatchSampler, self).__init__()
         self.labels = np.array(labels)
-        self.support_classes = support_classes 
-        self.query_classes = query_classes
         self.classes_per_it = classes_per_it
         self.support_per_class = num_support
         self.iterations = len(self.labels)  # 1-query per iteration, cover all data-pts
-
+        
         self.class_names = class_names 
         # Stores all class indices in order (0, 1, .., n)
         self.classes = torch.LongTensor(range(len(self.class_names)))
+        self.support_classes = torch.LongTensor([
+            idx for idx in self.classes 
+            if self.class_names[idx] in support_class_names
+        ])
+        self.query_classes = torch.LongTensor([
+            idx for idx in self.classes 
+            if self.class_names[idx] in query_class_names
+        ])
         self.counts = [ 
             np.count_nonzero(self.labels==class_idx.item()) 
             for class_idx in self.classes
@@ -77,6 +83,8 @@ class ExhaustiveExtendedBatchSampler(object):
             self.numel_per_class[sample_idx] += 1
 
         print(self.numel_per_class)
+        print("Support Domain:", self.support_classes)
+        print("Query Domain:", self.query_classes)
             
 
     def __iter__(self):
