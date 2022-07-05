@@ -34,6 +34,7 @@ class ExhaustiveExtendedBatchSampler(object):
         - force_support: an iterable of classes to always include in the sampled support 
                         (Requires that size of force_support is lower than `num_support`)
         """
+        
 
         super(ExhaustiveExtendedBatchSampler, self).__init__()
         self.labels = np.array(labels)
@@ -52,6 +53,17 @@ class ExhaustiveExtendedBatchSampler(object):
             idx for idx in self.classes 
             if self.class_names[idx] in query_class_names
         ])
+
+        # Validate force_support count
+        assert len(force_support) < self.classes_per_it, "More forced support classes than allowed classes per iteration!"
+        assert self.classes_per_it <= len(self.classes), "Insufficient classes for specified `classes_per_it`"
+
+        self.force_support_classes = torch.LongTensor([
+            idx for idx in self.classes 
+            if self.class_names[idx] in force_support
+        ])
+
+        # Accumulate counts for each class
         self.counts = [ 
             np.count_nonzero(self.labels==class_idx.item()) 
             for class_idx in self.classes
@@ -95,9 +107,10 @@ class ExhaustiveExtendedBatchSampler(object):
 
         spc = self.support_per_class   # number of shots
         cpi = self.classes_per_it
+        random_cpi = cpi - (1 + self.force_support_classes.size(dim=0))
 
         # Iterate over `self.indexes` to get each sample
-        for query_label in range(self.indexes.size(dim=0)):
+        for query_label in self.query_classes:
             print(query_label, "with", self.numel_per_class[query_label])
 
             for query_sample_idx in range(self.indexes.size(dim=1)):
@@ -111,13 +124,14 @@ class ExhaustiveExtendedBatchSampler(object):
 
                 # Sample classes for the support set
                 # Allow only classes with non-zero samples in them
+                # Ensure that `force_support_classes` are always selected
                 class_pool = [
-                    idx for idx in self.classes
+                    idx for idx in self.support_classes
                     if (idx!=query_label and self.numel_per_class[idx]!=0)
                 ]
-                c_idxs = np.append(
-                    np.random.permutation(class_pool)[:cpi-1],
-                    query_label
+                c_idxs = np.concatenate(
+                    np.random.permutation(class_pool)[:random_cpi],
+                    np.array(self.force_support_classes + [query_label])
                 )
 
                 # Prepare batch
