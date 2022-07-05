@@ -69,6 +69,8 @@ class ExhaustiveBatchSampler(object):
 
             # update num_elem_per_class
             self.numel_per_class[sample_idx] += 1
+
+        print(self.numel_per_class)
             
 
     def __iter__(self):
@@ -82,6 +84,7 @@ class ExhaustiveBatchSampler(object):
 
         # Iterate over `self.indexes` to get each sample
         for query_label in range(self.indexes.size(dim=0)):
+            print(query_label, "with", self.numel_per_class[query_label])
 
             for query_sample_idx in range(self.indexes.size(dim=1)):
                 

@@ -75,12 +75,14 @@ def get_prototypical_loss_fn(sampler):
 
         query_idxs = torch.stack(query_idxs).view(-1).long()
         query_samples = input_cpu[query_idxs]
-        query_classes = torch.unique(target_cpu[query_idxs])
-        n_query_classes = query_classes.size(0)
-
+        true_query_classes = target_cpu[query_idxs]
+        n_query_classes = torch.unique(true_query_classes).size(0)
+        # prototypes and dists --> class ordering is same as that of `classes`
         dists = PrototypicalLoss.euclidean_dist(query_samples, prototypes)
         log_p_y = F.log_softmax(-dists, dim=1).view(n_query_classes, n_query, -1)
 
+        # target_inds is specific to gathering labels from `log_p_y`
+        # indexes correspond to `true_query_classes`
         target_inds = torch.tensor(list(range(n_query_classes)))
         target_inds = target_inds.view(n_query_classes, 1, 1)
         target_inds = target_inds.expand(n_query_classes, n_query, 1).long()
@@ -89,14 +91,14 @@ def get_prototypical_loss_fn(sampler):
         # i.e. log_p_y has the clases in same order in both 2nd and 3rd dimensions
         loss_val = -log_p_y.gather(2, target_inds).squeeze().view(-1).mean()
         _, y_hat = log_p_y.max(2)
-        acc_val = y_hat.eq(target_inds.squeeze(2)).float().mean()
+        # Predicted indices are based on the `classes` var (obviously!)
+        pred_query_classes = classes[y_hat.flatten()]
+        acc_val = true_query_classes.eq(pred_query_classes).float().mean()    
 
         if not get_prediction_results:
             return loss_val,  acc_val
         else:
-            predicted_labels = classes[y_hat.squeeze()].flatten()
-            actual_labels = classes[target_inds.squeeze()].flatten()
-            return loss_val, acc_val, (predicted_labels, actual_labels)
+            return loss_val, acc_val, (pred_query_classes, true_query_classes)
 
     # Return wrapped loss function, with sampler bound
     return compute_loss
