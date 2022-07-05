@@ -68,6 +68,8 @@ class ISIC18_T3_Dataset(Dataset):
             range(len(self.csv_df))
         ))
 
+        print(f"Getting '{mode}' data from {self.img_concrete_path}")
+
 
     def __len__(self):
         return len(self.csv_df)

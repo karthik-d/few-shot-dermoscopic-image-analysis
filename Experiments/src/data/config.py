@@ -8,11 +8,11 @@ config.update(root_config)
 
 config.update(
     DotDict(
-        # csv_root_path = os.path.join(
-        #     config.root_path,
-        #     'data'
-        # ),
-        csv_root_path = "/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_1/",
+        csv_root_path = os.path.join(
+            config.root_path,
+            'data'
+        ),
+        # csv_root_path = "/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_1/",
         data_root_path = os.path.join(
             config.root_path, 
             'data', 
@@ -23,11 +23,11 @@ config.update(
 
 config.update(
     DotDict(
-        # isic18_t3_root_path = os.path.join(
-        #     config.data_root_path, 
-        #     'ISIC18-T3'
-        # ) 
-        isic18_t3_root_path = "/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_1"
+        isic18_t3_root_path = os.path.join(
+            config.data_root_path, 
+            'ISIC18-T3'
+        ) 
+        # isic18_t3_root_path = "/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_1"
     )
 )
 
