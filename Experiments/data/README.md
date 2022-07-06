@@ -182,7 +182,7 @@ Forced Support: tensor([ 1 ])
 Query Domain:   tensor([3, 5, 6])
 ```
 
-- 3-way, 3-shot testing
+- 2-way, 3-shot testing
 - The test set contains all 7 classes
 - When sampling, query set is populated only with one of `MEL`, `NV` and `BCC`. Support set, however, can contain any one of the seven classes
 - As an additional constraint, to study the impact of misclassification induced by `NV`, it is always included in the support set
@@ -190,3 +190,30 @@ Query Domain:   tensor([3, 5, 6])
 ##### Results
 
 ![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-4_exp-1.jpg)
+
+
+#### Experiment 2
+
+##### Configuration
+```
+TRAINING CONFIGURATION
+Class Names:              ([ MEL, NV, BCC, BKL ])
+Class Distribution: tensor([ 780, 4694,  360,  770])
+
+
+TESTING CONFIGURATION
+Class Names:        ([ MEL, NV, BCC, AKIEC, BKL, DF, VASC ])
+Class Distribution: ([ 333, 2011,  154,   98,  329,   34,   42])
+Support Domain: tensor([0, 1, 2, 3, 4, 5, 6])
+Forced Support: tensor([ 1 ])
+Query Domain:   tensor([3, 5, 6])
+```
+
+- 3-way, 3-shot testing
+- The test set contains all 7 classes
+- When sampling, query set is populated only with one of `MEL`, `NV` and `BCC`. Support set, however, can contain any one of the seven classes
+- As an additional constraint, to study the impact of misclassification induced by `NV`, it is always included in the support set
+
+##### Results
+
+![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-4_exp-2.jpg)
