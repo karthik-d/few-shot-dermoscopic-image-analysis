@@ -19,6 +19,8 @@ Forced Support: tensor([])
 Query Domain:   tensor([0, 1, 2, 3, 4, 5, 6])
 ```
 
+![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-1_exp-1.jpg)
+
 ### DS Phase 2
 
 - Most mis-classified classes are removed from the train set, and moved to the test set
