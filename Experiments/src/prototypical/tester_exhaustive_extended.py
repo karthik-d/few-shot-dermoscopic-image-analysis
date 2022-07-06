@@ -65,9 +65,7 @@ def init_sampler(config, class_names, labels, mode):
         labels=labels,
         classes_per_it=classes_per_it,
         num_support=config.num_support_test,
-        force_support=[
-            'NV'
-        ]    
+        force_support=[]    
     )
 
 
@@ -200,7 +198,8 @@ def test():
     # )
 
     model_path = os.path.join(
-        '/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_1',
+        # '/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_1',
+        config.logs_path,
         'best_model.pth'
     )
     model.load_state_dict(torch.load(model_path))
