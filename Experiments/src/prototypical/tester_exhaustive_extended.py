@@ -58,9 +58,9 @@ def init_sampler(config, class_names, labels, mode):
         class_names=class_names,
         support_class_names=class_names,
         query_class_names=[
-            'MEL',
-            'NV',
-            'BCC'
+            'AKIEC',
+            'VASC',
+            'DF'
         ],
         labels=labels,
         classes_per_it=classes_per_it,

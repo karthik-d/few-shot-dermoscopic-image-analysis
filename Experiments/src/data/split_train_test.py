@@ -122,7 +122,7 @@ def split_data_all_classes():
 
 
 """
-test_classes=[
+    test_classes=[
         'MEL',
         'NV',
         'BCC'
@@ -131,11 +131,11 @@ test_classes=[
 def split_test_classes(
     test_classes=[
         'AKIEC',
-        'DF',
-        'VASC'
-    ]
-    test_dir_name='test',
-    test_csv_name='ISIC18_T3_test.csv'
+        'VASC',
+        'DF'
+    ],
+    test_dir_name='isolated',
+    test_csv_name='ISIC18_T3_isolated.csv'
 ):
 
     """
