@@ -6,6 +6,9 @@
 - Split randomly using `src/split_train_test` in 75-25 ratio (ratio is per-class)
     - Use the function `split_data_all_classes()`
 
+#### Experiment 1
+
+##### Configuration
 ```
 TRAINING CONFIGURATION
 Class Names:              ([ MEL, NV, BCC, AKIEL, BKL, DF, VASC ])
@@ -19,6 +22,7 @@ Forced Support: tensor([])
 Query Domain:   tensor([0, 1, 2, 3, 4, 5, 6])
 ```
 
+##### Results
 ![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-1_exp-1.jpg)
 
 ### DS Phase 2
@@ -31,6 +35,7 @@ Query Domain:   tensor([0, 1, 2, 3, 4, 5, 6])
 
 #### Experiment 1
 
+##### Configuration
 ```
 TRAINING CONFIGURATION
 Class Names:              ([ AKIEL, BKL, DF, VASC ])
@@ -44,6 +49,9 @@ Forced Support: tensor([])
 Query Domain:   tensor([0, 1, 2])
 ```
 
+##### Results
+![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-2_exp-1.jpg)
+
 ### DS Phase 3
 
 - Complete data is split in 70-30 ratio (per-class ratio) into train and test sets
@@ -56,6 +64,7 @@ Query Domain:   tensor([0, 1, 2])
 
 #### Experiment 1
 
+##### Configuration
 ```
 TRAINING CONFIGURATION
 Class Names:              ([ AKIEL, BKL, DF, VASC ])
@@ -73,9 +82,12 @@ Query Domain:   tensor([0, 1, 2])
 - The test set contains all 7 classes
 - When sampling, query set is populated only with one of `MEL`, `NV` and `BCC`. Support set, however, can contain any one of the seven classes
 
+##### Results
+![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-3_exp-1.jpg)
 
 #### Experiment 2
 
+##### Configuration
 ```
 TRAINING CONFIGURATION
 Class Names:              ([ AKIEL, BKL, DF, VASC ])
@@ -93,8 +105,14 @@ Query Domain:   tensor([0, 1, 2])
 - The test set contains all 7 classes
 - When sampling, query set is populated only with one of `MEL`, `NV` and `BCC`. Support set, however, can contain any one of the seven classes
 
+##### Results
+![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-3_exp-2.jpg)
+
+
+
 #### Experiment 3
 
+##### Configuration
 ```
 TRAINING CONFIGURATION
 Class Names:              ([ AKIEL, BKL, DF, VASC ])
@@ -112,4 +130,7 @@ Query Domain:   tensor([0, 1, 2])
 - The test set contains all 7 classes
 - When sampling, query set is populated only with one of `MEL`, `NV` and `BCC`. Support set, however, can contain any one of the seven classes
 - As an additional constraint, to study the impact of misclassification induced by `NV`, it is always included in the support set
+
+##### Results
+![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-3_exp-3.jpg)
 
