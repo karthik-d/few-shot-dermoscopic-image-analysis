@@ -9,10 +9,11 @@ CSVs and Data are assumed to be in directories specified in `config`
 
 import os
 import pandas as pd
+from pathlib import Path
 
 from .config import config 
 
-SPLIT_RATIOS = [0.25]
+SPLIT_RATIOS = [0.30]
 SPLIT_DIR_NAMES = ["test"]
 SPLIT_CSV_NAMES = ["ISIC18_T3_test.csv"]
 
@@ -126,8 +127,8 @@ def split_test_classes(
         'NV',
         'BCC'
     ],
-    test_dir_name='test',
-    test_csv_name='ISIC18_T3_test.csv'
+    test_dir_name='isolate',
+    test_csv_name='ISIC18_T3_isolate.csv'
 ):
 
     """
