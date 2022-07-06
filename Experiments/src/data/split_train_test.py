@@ -127,8 +127,8 @@ def split_test_classes(
         'NV',
         'BCC'
     ],
-    test_dir_name='isolate',
-    test_csv_name='ISIC18_T3_isolate.csv'
+    test_dir_name='test',
+    test_csv_name='ISIC18_T3_test.csv'
 ):
 
     """

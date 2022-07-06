@@ -5,9 +5,9 @@ from prototypical import trainer, tester_exhaustive, tester_exhaustive_extended
 
 from data import split_train_test
 
-trainer.train()
-# tester_exhaustive.test()
-tester_exhaustive_extended.test()
+# trainer.train()
+tester_exhaustive.test()
+# tester_exhaustive_extended.test()
 
 # split_train_test.split_data_all_classes()
 # split_train_test.split_test_classes()
