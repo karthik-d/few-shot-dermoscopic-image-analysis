@@ -127,7 +127,11 @@ class ExhaustiveExtendedBatchSampler(object):
                 # Ensure that `force_support_classes` are always selected
                 class_pool = [
                     idx for idx in self.support_classes
-                    if (idx!=query_label and self.numel_per_class[idx]!=0)
+                    if (
+                        idx!=query_label
+                        and idx not in self.force_support_classes
+                        and self.numel_per_class[idx]!=0
+                    )
                 ]
 
                 # Count and sample random classes
