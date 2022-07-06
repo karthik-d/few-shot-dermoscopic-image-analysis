@@ -225,15 +225,15 @@ def run_concrete_train_loop(
         avg_acc_val = np.mean(val_acc[-config.iterations:])
 
         
-        # Save best model --> replaced if it beats current best
-        if avg_acc_val >= best_acc:
+        # Save best model --> replaced if it beats current best ( don't consider VAL set for now)
+        if avg_acc >= best_acc:
             torch.save(model.state_dict(), best_model_path)
-            best_acc = avg_acc_val
+            best_acc = avg_acc
             best_state = model.state_dict()
 
         # Save current model --> replaced at each epoch
         torch.save(model.state_dict(), last_model_path)
-        print(f'Avg Val Loss: {avg_loss_val}, Avg Val Acc: {avg_acc_val}, Best Acc: {best_acc}')
+        print(f'Avg Val Loss: {avg_loss_val}, Avg Val Acc: {avg_acc_val}, Best Acc (train): {best_acc}')
 
         # LOG training stats
         helpers.save_list_to_file(
