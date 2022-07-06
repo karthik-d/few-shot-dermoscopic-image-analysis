@@ -23,9 +23,23 @@
 
 #### Experiment 1
 
-- 2-way, 3-shot
+```
+TRAINING CONFIGURATION
+Class Names:              ([ AKIEL, BKL, DF, VASC ])
+Class Distribution: tensor([229, 770,  81, 100])
+
+TESTING CONFIGURATION
+Class Names:       ([ MEL, NV, BCC, AKIEL, BKL, DF, VASC ])
+Class Disribution: ([ 333, 2011,  154,   98,  329,   34,   42])
+Support Domain: tensor([0, 1, 2, 3, 4, 5, 6])
+Forced Support: tensor([])
+Query Domain:   tensor([0, 1, 2])
+```
+
+- 2-way, 3-shot testing
 - The test set contains all 7 classes
 - When sampling, query set is populated only with one of `MEL`, `NV` and `BCC`. Support set, however, can contain any one of the seven classes
+
 
 #### Experiment 2
 
@@ -38,11 +52,30 @@ TESTING CONFIGURATION
 Class Names:       ([ MEL, NV, BCC, AKIEL, BKL, DF, VASC ])
 Class Disribution: ([ 333, 2011,  154,   98,  329,   34,   42])
 Support Domain: tensor([0, 1, 2, 3, 4, 5, 6])
-Forced Support: tensor([ 1 ])
-Query Domain: tensor([0, 1, 2])
+Forced Support: tensor([])
+Query Domain:   tensor([0, 1, 2])
 ```
 
-- 3-way, 3-shot
+- 3-way, 3-shot testing
+- The test set contains all 7 classes
+- When sampling, query set is populated only with one of `MEL`, `NV` and `BCC`. Support set, however, can contain any one of the seven classes
+
+#### Experiment 3
+
+```
+TRAINING CONFIGURATION
+Class Names:              ([ AKIEL, BKL, DF, VASC ])
+Class Distribution: tensor([229, 770,  81, 100])
+
+TESTING CONFIGURATION
+Class Names:       ([ MEL, NV, BCC, AKIEL, BKL, DF, VASC ])
+Class Disribution: ([ 333, 2011,  154,   98,  329,   34,   42])
+Support Domain: tensor([0, 1, 2, 3, 4, 5, 6])
+Forced Support: tensor([ 1 ])
+Query Domain:   tensor([0, 1, 2])
+```
+
+- 3-way, 3-shot testing
 - The test set contains all 7 classes
 - When sampling, query set is populated only with one of `MEL`, `NV` and `BCC`. Support set, however, can contain any one of the seven classes
 - As an additional constraint, to study the impact of misclassification induced by `NV`, it is always included in the support set
