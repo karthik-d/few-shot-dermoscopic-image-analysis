@@ -1,9 +1,16 @@
+## Dataset Description
+
+### Malignant and Benign
+
+### Distribution
+
+
 ## Dataset Phases
 
 ### DS Phase 1
 
 - All classes are part of both, train and test sets
-- Split randomly using `src/split_train_test` in 75-25 ratio (ratio is per-class)
+- Split randomly using `src/split_train_test` in 70-30 ratio (ratio is per-class)
     - Use the function `split_data_all_classes()`
 
 #### Experiment 1
@@ -11,11 +18,11 @@
 ##### Configuration
 ```
 TRAINING CONFIGURATION
-Class Names:              ([ MEL, NV, BCC, AKIEL, BKL, DF, VASC ])
+Class Names:              ([ MEL, NV, BCC, AKIEC, BKL, DF, VASC ])
 Class Distribution: tensor([ 835, 5029,  386,  246,  825,   87,  107])
 
 TESTING CONFIGURATION
-Class Names:        ([ MEL, NV, BCC, AKIEL, BKL, DF, VASC ])
+Class Names:        ([ MEL, NV, BCC, AKIEC, BKL, DF, VASC ])
 Class Distribution: ([ 278, 1676,  128,   81,  274,   28,   35])
 Support Domain: tensor([0, 1, 2, 3, 4, 5, 6])
 Forced Support: tensor([])
@@ -29,7 +36,7 @@ Query Domain:   tensor([0, 1, 2, 3, 4, 5, 6])
 
 - Most mis-classified classes are removed from the train set, and moved to the test set
 - Specifically, `MEL`, `NV` and `BCC` are made the test set, and the model is trained only using the other 4 classes.
-- Split deterministically using `src/split_train_test` in 75-25 ratio (ratio is per-class)
+- Split deterministically using `src/split_train_test` in 70-30 ratio (ratio is per-class)
     - Use the function `split_test_classes()`
 - This tests the strength of the similarity function learnt by the model
 
@@ -38,7 +45,7 @@ Query Domain:   tensor([0, 1, 2, 3, 4, 5, 6])
 ##### Configuration
 ```
 TRAINING CONFIGURATION
-Class Names:              ([ AKIEL, BKL, DF, VASC ])
+Class Names:              ([ AKIEC, BKL, DF, VASC ])
 Class Distribution: tensor([ 327, 1099,  115,  142])
 
 TESTING CONFIGURATION
@@ -67,11 +74,11 @@ Query Domain:   tensor([0, 1, 2])
 ##### Configuration
 ```
 TRAINING CONFIGURATION
-Class Names:              ([ AKIEL, BKL, DF, VASC ])
+Class Names:              ([ AKIEC, BKL, DF, VASC ])
 Class Distribution: tensor([229, 770,  81, 100])
 
 TESTING CONFIGURATION
-Class Names:        ([ MEL, NV, BCC, AKIEL, BKL, DF, VASC ])
+Class Names:        ([ MEL, NV, BCC, AKIEC, BKL, DF, VASC ])
 Class Distribution: ([ 333, 2011,  154,   98,  329,   34,   42])
 Support Domain: tensor([0, 1, 2, 3, 4, 5, 6])
 Forced Support: tensor([])
@@ -90,11 +97,11 @@ Query Domain:   tensor([0, 1, 2])
 ##### Configuration
 ```
 TRAINING CONFIGURATION
-Class Names:              ([ AKIEL, BKL, DF, VASC ])
+Class Names:              ([ AKIEC, BKL, DF, VASC ])
 Class Distribution: tensor([229, 770,  81, 100])
 
 TESTING CONFIGURATION
-Class Names:        ([ MEL, NV, BCC, AKIEL, BKL, DF, VASC ])
+Class Names:        ([ MEL, NV, BCC, AKIEC, BKL, DF, VASC ])
 Class Distribution: ([ 333, 2011,  154,   98,  329,   34,   42])
 Support Domain: tensor([0, 1, 2, 3, 4, 5, 6])
 Forced Support: tensor([])
@@ -115,11 +122,11 @@ Query Domain:   tensor([0, 1, 2])
 ##### Configuration
 ```
 TRAINING CONFIGURATION
-Class Names:              ([ AKIEL, BKL, DF, VASC ])
+Class Names:              ([ AKIEC, BKL, DF, VASC ])
 Class Distribution: tensor([229, 770,  81, 100])
 
 TESTING CONFIGURATION
-Class Names:        ([ MEL, NV, BCC, AKIEL, BKL, DF, VASC ])
+Class Names:        ([ MEL, NV, BCC, AKIEC, BKL, DF, VASC ])
 Class Distribution: ([ 333, 2011,  154,   98,  329,   34,   42])
 Support Domain: tensor([0, 1, 2, 3, 4, 5, 6])
 Forced Support: tensor([ 1 ])
