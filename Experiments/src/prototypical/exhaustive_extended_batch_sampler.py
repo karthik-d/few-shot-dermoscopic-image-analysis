@@ -107,7 +107,7 @@ class ExhaustiveExtendedBatchSampler(object):
 
         spc = self.support_per_class   # number of shots
         cpi = self.classes_per_it
-        random_cpi = cpi - (1 + self.force_support_classes.size(dim=0))
+        random_cpi = cpi - (1 + len(self.force_support_classes))
 
         # Iterate over `self.indexes` to get each sample
         for query_label in self.query_classes:
@@ -136,10 +136,10 @@ class ExhaustiveExtendedBatchSampler(object):
                 if query_label in self.force_support_classes:
                     num_random_classes += 1
                     fixed_classes = self.force_support_classes[:]
-                c_idxs = np.concatenate(
-                    np.random.permutation(class_pool)[:num_random_classes],
+                c_idxs = np.concatenate((
+                    np.array(np.random.permutation(class_pool)[:num_random_classes]),
                     np.array(fixed_classes)
-                )
+                ))
 
                 # Prepare batch
                 batch_size = (spc * cpi) + 1  # (support + 1 query per iteration

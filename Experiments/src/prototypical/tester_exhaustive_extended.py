@@ -57,7 +57,7 @@ def init_sampler(config, class_names, labels, mode):
     return ExhaustiveExtendedBatchSampler(
         class_names=class_names,
         support_class_names=class_names,
-        query_class_names=test_classes=[
+        query_class_names=[
             'MEL',
             'NV',
             'BCC'
