@@ -58,10 +58,10 @@ class ExhaustiveExtendedBatchSampler(object):
         assert len(force_support) < self.classes_per_it, "More forced support classes than allowed classes per iteration!"
         assert self.classes_per_it <= len(self.classes), "Insufficient classes for specified `classes_per_it`"
 
-        self.force_support_classes = torch.LongTensor([
+        self.force_support_classes = [
             idx for idx in self.classes 
             if self.class_names[idx] in force_support
-        ])
+        ]
 
         # Accumulate counts for each class
         self.counts = [ 
@@ -129,9 +129,16 @@ class ExhaustiveExtendedBatchSampler(object):
                     idx for idx in self.support_classes
                     if (idx!=query_label and self.numel_per_class[idx]!=0)
                 ]
+
+                # Count and sample random classes
+                num_random_classes = random_cpi 
+                fixed_classes = self.force_support_classes[:] + [query_label]
+                if query_label in self.force_support_classes:
+                    num_random_classes += 1
+                    fixed_classes = self.force_support_classes[:]
                 c_idxs = np.concatenate(
-                    np.random.permutation(class_pool)[:random_cpi],
-                    np.array(self.force_support_classes + [query_label])
+                    np.random.permutation(class_pool)[:num_random_classes],
+                    np.array(fixed_classes)
                 )
 
                 # Prepare batch
