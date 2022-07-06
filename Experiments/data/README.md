@@ -170,8 +170,9 @@ Query Domain:   tensor([0, 1, 2])
 ##### Configuration
 ```
 TRAINING CONFIGURATION
-Class Names:              ([ AKIEC, BKL, DF, VASC ])
-Class Distribution: tensor([229, 770,  81, 100])
+Class Names:              ([ MEL, NV, BCC, BKL ])
+Class Distribution: tensor([ 780, 4694,  360,  770])
+
 
 TESTING CONFIGURATION
 Class Names:        ([ MEL, NV, BCC, AKIEC, BKL, DF, VASC ])
@@ -187,4 +188,5 @@ Query Domain:   tensor([3, 5, 6])
 - As an additional constraint, to study the impact of misclassification induced by `NV`, it is always included in the support set
 
 ##### Results
-![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-3_exp-3.jpg)
+
+![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-4_exp-1.jpg)
