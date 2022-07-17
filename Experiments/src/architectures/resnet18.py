@@ -1,4 +1,4 @@
-from torchvision.models import resnet18, ResNet18_Weights
+from torchvision.models import resnet18
 
 import torch.nn as nn
 
@@ -14,11 +14,14 @@ class ResNet18(nn.Module):
         
         # load weights without final layer
         pretrain = resnet18(pretrained=True).state_dict()
-        del pretrained["fc.weight"], pretrained["fc.bias"]
+        del pretrain["fc.weight"], pretrain["fc.bias"]
 
-        self.encoder = resnet18(weights=weights, progress=False).eval()
-        self.encoder.load_state_dict(state_dict=pretrained, strict=False)
-        
+        self.encoder = resnet18()
+        self.encoder.load_state_dict(state_dict=pretrain, strict=False)
+
+        self.out_features = self.encoder.fc.in_features
+        self.encoder.fc = nn.Identity()
+
 
     def forward(self, x):
         x = self.encoder(x)

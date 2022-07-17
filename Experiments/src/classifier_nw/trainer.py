@@ -370,12 +370,12 @@ def test():
     )
 
     # load model
-    model = init_metaderm(config)
-    model_path = os.path.join(
-        config.logs_path, 
-        'best_model.pth'
-    )
-    model.load_state_dict(torch.load(model_path))
+    # model = init_metaderm(config)
+    # model_path = os.path.join(
+    #     config.logs_path, 
+    #     'best_model.pth'
+    # )
+    # model.load_state_dict(torch.load(model_path))
 
     # run test
     run_concrete_test_loop(

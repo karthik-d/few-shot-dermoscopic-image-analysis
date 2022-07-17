@@ -17,8 +17,7 @@ class ResNet18_LR(ResNet18):
         # Setup a linear transformation for classification
         self.num_classes = num_classes
         if self.num_classes is not None:
-            self.avgpool = nn.AdaptiveAvgPool2d(1)
-            self.classifier = nn.Linear(64, self.num_classes)
+            self.classifier = nn.Linear(self.out_features, self.num_classes)
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -34,7 +33,6 @@ class ResNet18_LR(ResNet18):
         
         # Pass through classifier
         if self.num_classes is not None:
-            output = self.avgpool(output)
             feat_vec = output.view(output.size(0), -1)
             output = self.classifier(feat_vec)  
         else:
