@@ -23,7 +23,7 @@ def get_local_classifier(classifier_name='LR', sampler=None):
         target_cpu = target.to('cpu')
         input_cpu = input.to('cpu')
 
-        classes = torch.unique(target_cpu)
+        classes = np.unique(target_cpu.detach().numpy())
         n_classes = len(classes)
 
         (support_idxs, query_idxs) = sampler.decode_batch(
@@ -48,12 +48,19 @@ def get_local_classifier(classifier_name='LR', sampler=None):
         )
 
         print(query_preds)
+        print(query_truths)
         acc_val = np.count_nonzero(query_truths==query_preds)/len(query_truths)    
 
         if not get_prediction_results:
             return acc_val
         else:
-            return acc_val, (query_preds, query_truths)
+            return (
+                acc_val, 
+                (
+                    torch.LongTensor(query_preds),
+                    torch.LongTensor(query_truths)
+                )
+            )
 
     # Return classifier with sampler and type bound
     return local_classifier

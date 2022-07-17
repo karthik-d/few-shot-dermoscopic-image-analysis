@@ -115,10 +115,6 @@ def init_metaderm(config):
     return model
 
 
-def compute_accuracy(labels, predictions):
-    pass
-
-
 def run_concrete_test_loop(config, data_config, test_dataloader, local_classifier, model, dataset):
     
     """ 
@@ -148,12 +144,13 @@ def run_concrete_test_loop(config, data_config, test_dataloader, local_classifie
                 y = y.to(device)      
             
             model_output = model(x)
-            acc, (all_predictions, all_truths) = local_classifier(
+            acc, (predictions, truths) = local_classifier(
                 model_output,
-                y
+                y,
+                get_prediction_results=True
             )
 
-            avg_acc.append(acc.item())
+            avg_acc.append(acc)
 
             # gather predictions
             all_predictions = torch.cat([
