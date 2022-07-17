@@ -47,3 +47,19 @@ config.update(
         )
     )
 )
+
+config.update(
+    DotDict(
+        test_classes = [
+            'AKIEC',
+            'VASC',
+            'DF'
+        ],
+        train_classes = [
+            'MEL',
+            'NV',
+            'BCC',
+            'BKL'
+        ]
+    )
+)

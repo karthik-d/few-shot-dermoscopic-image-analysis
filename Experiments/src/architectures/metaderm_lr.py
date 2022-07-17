@@ -1,9 +1,10 @@
-from .metaderm import MetaDerm 
+import torch.nn as nn
 
+from .metaderm import MetaDerm 
 
 # TODO: Transform into a common embedder, with backbone selection
 
-class MetaDerm_LR(nn.Module):
+class MetaDerm_LR(MetaDerm):
     
     """
     Contructs an architecture as described in the reference paper (MetaDermDiagnosis-KMahajan)
@@ -17,20 +18,26 @@ class MetaDerm_LR(nn.Module):
     """
     
     def __init__(self, x_dim=3, hid_dim=32, z_dim=32, num_classes=None):
+        
         super(MetaDerm_LR, self).__init__()
+        
         # Setup a linear transformation for classification
         self.num_classes = num_classes
         if self.num_classes is not None:
             self.classifier = nn.Linear(32, self.num_classes)
 
-    def forward(self, x, get_feat_vec=False):
-        output = self.encoder(x)
-        feature_vec = output.view(output.size(0), -1)
+    
+    def forward(self, x):
+        
+        print(x.shape)
+        output = self.encoder(x).view(output.size(0), -1)
+        print(output.shape)
+        feature_vec = output
+        
         # Pass through classifier
         if self.num_classes is not None:
-            output = self.classifier(output)        
-        # Conditional return
-        if get_feat_vec:
-            return feat_vec, output 
+            output = self.classifier(output)   
         else:
-            return output  
+            output = output.view(output.size(0), -1)    
+        
+        return output

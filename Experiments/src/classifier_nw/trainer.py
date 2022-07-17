@@ -2,7 +2,7 @@ from architectures.metaderm import MetaDerm
 from architectures.protonet import ProtoNet
 from architectures.metaderm_lr import MetaDerm_LR
 from .prototypical_batch_sampler import PrototypicalBatchSampler
-from .crossentropy_loss import get_prototypical_loss_fn
+from .crossentropy_loss import get_crossentropy_loss_fn
 from . import transforms
 #from omniglot_dataset import OmniglotDataset
 
@@ -102,12 +102,12 @@ def init_dataloader_nonmeta(config, data_config, mode):
 def init_loss_fn(sampler):
     
     # bind sampler and return loss function
-    return get_prototypical_loss_fn(sampler=sampler)
+    return get_crossentropy_loss_fn(sampler=sampler)
 
 
 def init_loss_fn_nonmeta():
 
-    return get_prototypical_loss_fn(sampler=None)
+    return get_crossentropy_loss_fn(sampler=None)
 
 
 def init_protonet(config):
@@ -120,7 +120,7 @@ def init_protonet(config):
     return ProtoNet().to(device)
 
 
-def init_metaderm(config):
+def init_metaderm(config, data_config):
     
     """
     Initialize the MetaDerm architecture
@@ -128,8 +128,9 @@ def init_metaderm(config):
 
     device = 'cuda:0' if (torch.cuda.is_available() and config.cuda) else 'cpu'
     model = MetaDerm_LR(
-        num_classes=
+        num_classes=len(data_config.train_classes)
     ).to(device)
+
     print(model)
     return model
 
@@ -202,8 +203,19 @@ def run_concrete_train_loop(
             
             # retrace gradient and propagate batch
             optim.zero_grad()            
-            x, y = batch
-            x, y = x.to(device), y.to(device)
+            x, y = batch 
+
+            # Pack into batch (for single instance)
+            if len(x.shape)==3:
+                x = x.unsqueeze(0)
+            if len(y.shape)==3:
+                y = y.unsqueeze(0) 
+
+            # Decode data from tensor
+            if isinstance(x, torch.Tensor):
+                x = x.to(device)
+            if isinstance(y, torch.Tensor):
+                y = y.to(device)      
             
             model_output = model(x)
             loss, acc = tr_loss_fn(
@@ -363,12 +375,12 @@ def train():
 
     init_seed(config)
 
-    tr_dataloader, tr_sampler = init_dataloader_nonmeta(
+    tr_dataloader = init_dataloader_nonmeta(
         config=config, 
         data_config=data_config,
         mode='train'
     )
-    val_dataloader, val_sampler = init_dataloader_nonmeta(
+    val_dataloader = init_dataloader_nonmeta(
         config=config, 
         data_config=data_config,
         mode='val'
@@ -377,7 +389,7 @@ def train():
     tr_loss_fn = init_loss_fn_nonmeta()
     val_loss_fn = init_loss_fn_nonmeta()
 
-    model = init_metaderm(config)
+    model = init_metaderm(config, data_config)
     optim = init_optim(config, model)
     lr_scheduler = init_lr_scheduler(config, optim)
     train_stats = run_concrete_train_loop(

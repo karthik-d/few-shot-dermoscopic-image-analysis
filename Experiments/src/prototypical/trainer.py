@@ -177,6 +177,7 @@ def run_concrete_train_loop(
             optim.zero_grad()            
             x, y = batch
             x, y = x.to(device), y.to(device)
+            print(x.shape)
             
             model_output = model(x)
             loss, acc = tr_loss_fn(
@@ -210,7 +211,6 @@ def run_concrete_train_loop(
             # only propagate batch
             x, y = batch
             x, y = x.to(device), y.to(device)
-
             model_output = model(x)
             loss, acc = val_loss_fn(
                 model_output, 

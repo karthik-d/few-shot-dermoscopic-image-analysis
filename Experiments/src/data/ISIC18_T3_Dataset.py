@@ -2,6 +2,7 @@ from torch.utils.data import Dataset
 from torchvision import io 
 import os 
 import pandas as pd
+import torch
 
 from .config import config
 
@@ -82,7 +83,10 @@ class ISIC18_T3_Dataset(Dataset):
 
         NOTE: Shuffling is taken care of by the DataLoader wrapper!
         """
-        idx = idx.item()
+        
+        if not isinstance(idx, int):
+            idx = idx.item()
+        
         img_path = os.path.join(
             self.img_concrete_path, 
             "{0}.{1}".format(
@@ -108,8 +112,19 @@ class ISIC18_T3_Dataset(Dataset):
         # return data, label
         return img_data, img_label
 
+
+    @staticmethod 
+    def return_tensor(func):
+        
+        def wrapped(*args, **kwargs):
+            result = func(*args, **kwargs)
+            return torch.LongTensor([result])
+
+        return wrapped
+
     
     @staticmethod
+    @return_tensor.__func__
     def get_sparse_label(csv_df, idx):
         
         """ 
@@ -122,3 +137,4 @@ class ISIC18_T3_Dataset(Dataset):
             if value == 1:
                 return ISIC18_T3_Dataset.class_id_map.get(classlabel)
         return -1
+    
