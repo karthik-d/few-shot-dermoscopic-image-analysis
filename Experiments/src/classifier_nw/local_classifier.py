@@ -1,9 +1,13 @@
+import torch
+
 from classifiers import logistic_classifier
+
 
 def get_local_classifier(classifier_name='LR', sampler=None):
 
     if classifier_name == 'LR':
         classifier = logistic_classifier
+        print()
 
     def local_classifier(input, target, get_prediction_results=False):
 
@@ -26,17 +30,17 @@ def get_local_classifier(classifier_name='LR', sampler=None):
             batch_classes=classes
         )
 
+        n_support = len(support_idxs[0])
         support_idxs = torch.stack(support_idxs).view(-1).long()
         support_samples = input_cpu[support_idxs]
         support_truths = target_cpu[support_idxs]
-        n_support = len(support_idxs[0])
 
+        n_query = len(query_idxs[0])
         query_idxs = torch.stack(query_idxs).view(-1).long()
         query_samples = input_cpu[query_idxs]
         query_truths = target_cpu[query_idxs]
-        n_query = len(query_idxs[0])
 
-        query_preds = classifier(
+        query_preds = classifier.fit_predict(
             support_samples,
             support_truths,
             query_samples

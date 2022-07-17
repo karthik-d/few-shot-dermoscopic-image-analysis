@@ -4,7 +4,7 @@ from .exhaustive_extended_batch_sampler import ExhaustiveExtendedBatchSampler
 from .local_classifier import get_local_classifier
 from . import transforms
 
-from prototypical.config import config
+from .config import config
 from data.config import config as data_config
 from data.ISIC18_T3_Dataset import ISIC18_T3_Dataset
 from utils import helpers, displayers
@@ -148,8 +148,9 @@ def run_concrete_test_loop(config, data_config, test_dataloader, local_classifie
                 y = y.to(device)      
             
             model_output = model(x)
-            acc = local_classifier(
-                model_output
+            acc, (all_predictions, all_truths) = local_classifier(
+                model_output,
+                y
             )
 
             avg_acc.append(acc.item())
@@ -221,7 +222,7 @@ def test():
         config.logs_path,
         'best_model.pth'
     )
-    model.load_state_dict(torch.load(model_path))
+    model.load_state_dict(torch.load(model_path), strict=False)
 
     # run test
     run_concrete_test_loop(

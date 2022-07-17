@@ -6,7 +6,7 @@ from .crossentropy_loss import get_crossentropy_loss_fn
 from . import transforms
 #from omniglot_dataset import OmniglotDataset
 
-from prototypical.config import config
+from .config import config
 from data.config import config as data_config
 from data.ISIC18_T3_Dataset import ISIC18_T3_Dataset
 from utils import helpers
