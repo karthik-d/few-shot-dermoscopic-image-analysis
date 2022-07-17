@@ -113,6 +113,7 @@ def get_crossentropy_loss_fn(classes, sampler=None):
 
         input_cpu = input.to('cpu')
 
+        print(classes, target)
         if isinstance(target, int):
             class_posn = classes.index(target)
         else:

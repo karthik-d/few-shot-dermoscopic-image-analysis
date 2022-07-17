@@ -13,9 +13,9 @@ from pathlib import Path
 
 from .config import config 
 
-SPLIT_RATIOS = [0.20]
-SPLIT_DIR_NAMES = ["val"]
-SPLIT_CSV_NAMES = ["ISIC18_T3_val.csv"]
+SPLIT_RATIOS = [0.30]
+SPLIT_DIR_NAMES = ["test"]
+SPLIT_CSV_NAMES = ["ISIC18_T3_test.csv"]
 
 SRC_CSV_NAME = "ISIC18_T3_train.csv"
 SRC_DIR_NAME = "train"
@@ -134,8 +134,8 @@ def split_test_classes(
         'VASC',
         'DF'
     ],
-    test_dir_name='test',
-    test_csv_name='ISIC18_T3_test.csv'
+    test_dir_name='isolated',
+    test_csv_name='ISIC18_T3_isolated.csv'
 ):
 
     """

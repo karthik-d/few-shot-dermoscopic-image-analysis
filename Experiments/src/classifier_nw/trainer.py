@@ -243,6 +243,7 @@ def run_concrete_train_loop(
 
             train_loss.append(loss.item())
             train_acc.append(acc.item())
+            break
 
         # Compute training stats
         avg_loss = np.mean(train_loss[-config.iterations:])
@@ -262,12 +263,22 @@ def run_concrete_train_loop(
             
             # only propagate batch
             x, y = batch
-            x, y = x.to(device), y.to(device)
 
+            # Pack into batch (for single instance)
+            if len(x.shape)==3:
+                x = x.unsqueeze(0)
+
+            # Decode data from tensor
+            if isinstance(x, torch.Tensor):
+                x = x.to(device)
+            if isinstance(y, torch.Tensor):
+                y = y.to(device)      
+            
             model_output = model(x)
-            loss, acc = val_loss_fn(
+            loss, acc = tr_loss_fn(
                 model_output, 
-                target=y
+                target=y,
+                get_prediction_results=False
             )
                 
             val_loss.append(loss.item())
