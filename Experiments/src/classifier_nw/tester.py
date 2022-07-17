@@ -164,16 +164,16 @@ def run_concrete_test_loop(config, data_config, test_dataloader, local_classifie
                 truths
             ])
 
+        avg_acc_val = np.mean(avg_acc)
+        print(f'\nAverage Test Acc: {avg_acc_val}')
+        
         confusion_matrix = displayers.get_printable_confusion_matrix(
-            all_labels=all_truths,
-            all_predictions=all_predictions,
+            all_labels=all_truths.detach().numpy(),
+            all_predictions=all_predictions.detach().numpy(),
             classes=data_config.test_classes
         )
         print("\nClassification Confusion Matrix\n")
         print(confusion_matrix)
-
-        avg_acc_val = np.mean(avg_acc)
-        print(f'\nAverage Test Acc: {avg_acc_val}')
     
     # Compute average stats
     avg_acc_val = np.mean(avg_acc)

@@ -8,7 +8,6 @@ def get_local_classifier(classifier_name='LR', sampler=None):
 
     if classifier_name == 'LR':
         classifier = logistic_classifier
-        print()
 
     def local_classifier(input, target, get_prediction_results=False):
 
@@ -47,10 +46,7 @@ def get_local_classifier(classifier_name='LR', sampler=None):
             query_samples.detach().numpy()
         )
 
-        print(query_preds)
-        print(query_truths)
-        acc_val = np.count_nonzero(query_truths==query_preds)/len(query_truths)    
-
+        acc_val = np.count_nonzero(query_truths.detach().numpy()==query_preds)/len(query_truths)  
         if not get_prediction_results:
             return acc_val
         else:
@@ -58,7 +54,7 @@ def get_local_classifier(classifier_name='LR', sampler=None):
                 acc_val, 
                 (
                     torch.LongTensor(query_preds),
-                    torch.LongTensor(query_truths)
+                    query_truths
                 )
             )
 
