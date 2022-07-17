@@ -35,7 +35,7 @@ class CrossEntropyLoss(Module):
         return torch.pow(x - y, 2).sum(2)
 
 
-def get_crossentropy_loss_fn(sampler=None):
+def get_crossentropy_loss_fn(classes, sampler=None):
 
     loss_fn = nn.CrossEntropyLoss()
 
@@ -95,13 +95,42 @@ def get_crossentropy_loss_fn(sampler=None):
         else:
             return loss_val, acc_val, (pred_query_classes, true_query_classes)
 
+    
+    def compute_loss_nonmeta(input, target, get_prediction_results=False):
+
+        """
+        Args:
+        - input: the model output for a batch of samples
+        - target: ground truth for the above batch of samples
+        - get_prediction_results: If True, a third return value corresponds to 
+                                    (predicted_labels, actual_labels) 
+        """
+
+        input_cpu = input.to('cpu')
+
+        if isinstance(target, int):
+            class_posn = classes.index(target.item())
+        else:
+            class_posn = classes.index(target.item())
+        
+        print(classes, class_posn, target)
+        class_posn_cpu = torch.LongTensor([class_posn]).to('cpu')
+        return loss_fn(input_cpu, target_cpu)
+
+    
+    def accuracy(input, target):
+
+        # predictions = 
+        pass
+
+
     # Return wrapped loss function, with sampler bound (if applicable)
     if sampler is None:
         loss_mode = 'nonmeta'
-        return loss_fn
+        return compute_loss_nonmeta
     else: 
         loss_mode = 'meta'
-        return compute_loss
+        return compute_loss_meta
 
     
 

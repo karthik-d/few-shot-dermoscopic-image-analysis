@@ -99,15 +99,31 @@ def init_dataloader_nonmeta(config, data_config, mode):
     )
 
 
-def init_loss_fn(sampler):
+def init_loss_fn(sampler, mode):
     
     # bind sampler and return loss function
-    return get_crossentropy_loss_fn(sampler=sampler)
+    if mode in ['train', 'val']:
+        class_names = data_config.train_classes 
+    else:
+        class_names = data_config.test_classes
+
+    return get_crossentropy_loss_fn(
+        classes=ISIC18_T3_Dataset.get_class_ids(class_names),
+        sampler=sampler
+    )
 
 
-def init_loss_fn_nonmeta():
+def init_loss_fn_nonmeta(mode):
 
-    return get_crossentropy_loss_fn(sampler=None)
+    if mode == 'train':
+        class_names = data_config.train_classes 
+    else:
+        class_names = data_config.test_classes
+
+    return get_crossentropy_loss_fn(
+        classes=ISIC18_T3_Dataset.get_class_ids(class_names),
+        sampler=None
+    )
 
 
 def init_protonet(config):
@@ -384,8 +400,8 @@ def train():
         mode='val'
     )
 
-    tr_loss_fn = init_loss_fn_nonmeta()
-    val_loss_fn = init_loss_fn_nonmeta()
+    tr_loss_fn = init_loss_fn_nonmeta(mode='train')
+    val_loss_fn = init_loss_fn_nonmeta(mode='val')
 
     model = init_metaderm(config, data_config)
     optim = init_optim(config, model)

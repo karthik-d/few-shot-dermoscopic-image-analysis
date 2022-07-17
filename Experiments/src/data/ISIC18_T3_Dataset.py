@@ -113,6 +113,14 @@ class ISIC18_T3_Dataset(Dataset):
         return img_data, img_label
 
 
+    @staticmethod
+    def get_class_ids(class_names):
+        return [
+            ISIC18_T3_Dataset.class_id_map.get(x)
+            for x in class_names
+        ]
+
+
     @staticmethod 
     def return_tensor(func):
         
