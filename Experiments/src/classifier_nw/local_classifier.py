@@ -1,6 +1,6 @@
 from classifiers import logistic_classifier
 
-def get_local_classifier(classes, classifier_name='LR', sampler=None):
+def get_local_classifier(classifier_name='LR', sampler=None):
 
     if classifier_name == 'LR':
         classifier = logistic_classifier
@@ -18,6 +18,7 @@ def get_local_classifier(classes, classifier_name='LR', sampler=None):
         target_cpu = target.to('cpu')
         input_cpu = input.to('cpu')
 
+        classes = torch.unique(target_cpu)
         n_classes = len(classes)
 
         (support_idxs, query_idxs) = sampler.decode_batch(

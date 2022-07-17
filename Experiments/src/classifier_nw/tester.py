@@ -55,7 +55,7 @@ def init_sampler(config, data_config, labels, mode):
     # Initialize and return the batch sampler 
     # exhaustively makes 1 query per iteration
     return ExhaustiveExtendedBatchSampler(
-        class_names=class_names,
+        class_names=list(ISIC18_T3_Dataset.class_id_map.keys()),
         support_class_names=data_config.test_classes,
         query_class_names=data_config.test_classes,
         labels=labels,
@@ -84,16 +84,10 @@ def init_loss_fn(sampler):
     return get_prototypical_loss_fn(sampler=sampler)
 
 
-def init_local_classifier(config, data_config, sampler, mode='test'):
-
-    if mode in ['train', 'val']:
-        class_names = data_config.train_classes 
-    else:
-        class_names = data_config.test_classes
+def init_local_classifier(config, data_config, sampler):
     
     # bind sampler and classifier type, return loss function
     return get_local_classifier(
-        class_names=class_names,
         classifier_name=config.classifier_name,
         sampler=sampler
     )
@@ -212,8 +206,7 @@ def test():
     local_classifier = init_local_classifier(
         config, 
         data_config,
-        sampler,
-        mode='test'
+        sampler
     )
 
     # load model
