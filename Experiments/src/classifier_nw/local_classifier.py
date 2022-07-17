@@ -7,7 +7,7 @@ from classifiers import (
     linear_svm, 
     polynomial_svm, 
     decision_tree, 
-    nearest_neighbor
+    neighbors_classifier
 )
 
 
@@ -20,7 +20,7 @@ def get_local_classifier(classifier_name='LR', sampler=None):
     elif classifier_name == 'P_SVM':
         classifier = polynomial_svm
     elif classifier_name == 'NN':
-        classifier = nearest_neighbor
+        classifier = neighbors_classifier
     elif classifier_name == 'DTree':
         classifier = decision_tree
 

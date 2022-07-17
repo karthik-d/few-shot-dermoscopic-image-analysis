@@ -6,7 +6,7 @@ from sklearn.preprocessing import StandardScaler
 def fit_predict(support_X, support_y, query):
 
     clf = make_pipeline(
-            #StandardScaler(), 
+            StandardScaler(), 
             LogisticRegression(
                 penalty='l2',
                 solver='lbfgs',
