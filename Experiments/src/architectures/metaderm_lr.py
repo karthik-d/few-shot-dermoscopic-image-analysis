@@ -38,6 +38,8 @@ class MetaDerm_LR(MetaDerm):
             feat_vec = output.view(output.size(0), -1)
             output = self.classifier(feat_vec)  
         else:
+            print(output.shape)
             output = output.view(output.size(0), -1)
+            print(output.shape)
         
         return output
