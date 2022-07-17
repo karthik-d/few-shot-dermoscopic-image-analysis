@@ -24,20 +24,20 @@ class MetaDerm_LR(MetaDerm):
         # Setup a linear transformation for classification
         self.num_classes = num_classes
         if self.num_classes is not None:
+            self.avgpool = nn.AdaptiveAvgPool2d(1)
             self.classifier = nn.Linear(32, self.num_classes)
 
     
     def forward(self, x):
         
-        print(x.shape)
-        output = self.encoder(x).view(output.size(0), -1)
-        print(output.shape)
-        feature_vec = output
+        output = self.encoder(x)
         
         # Pass through classifier
         if self.num_classes is not None:
-            output = self.classifier(output)   
+            output = self.avgpool(output)
+            feat_vec = output.view(output.size(0), -1)
+            output = self.classifier(feat_vec)  
         else:
-            output = output.view(output.size(0), -1)    
+            output = output.view(output.size(0), -1)
         
         return output

@@ -35,7 +35,7 @@ class PrototypicalBatchSampler(object):
         self.n_query = num_query
         self.sample_per_class = self.n_support + self.n_query 
         self.iterations = iterations
-
+        
         self.classes, self.counts = np.unique(self.labels, return_counts=True)
         self.classes = torch.LongTensor(self.classes)
 

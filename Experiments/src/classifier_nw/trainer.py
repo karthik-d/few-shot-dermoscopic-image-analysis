@@ -208,8 +208,6 @@ def run_concrete_train_loop(
             # Pack into batch (for single instance)
             if len(x.shape)==3:
                 x = x.unsqueeze(0)
-            if len(y.shape)==3:
-                y = y.unsqueeze(0) 
 
             # Decode data from tensor
             if isinstance(x, torch.Tensor):

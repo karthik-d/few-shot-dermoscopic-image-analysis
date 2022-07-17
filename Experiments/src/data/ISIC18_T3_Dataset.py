@@ -58,8 +58,8 @@ class ISIC18_T3_Dataset(Dataset):
         assert os.path.isdir(self.img_concrete_path), f"Could not find valid data path at {self.img_concrete_path}"
         
         self.img_frmt_ext = img_ext
-        self.transform = None 
-        self.target_transform = None
+        self.transform = transform
+        self.target_transform = target_transform
         
         self.num_classes = len(self.class_id_map)
         self.class_names = list(self.class_id_map.keys())
@@ -118,13 +118,12 @@ class ISIC18_T3_Dataset(Dataset):
         
         def wrapped(*args, **kwargs):
             result = func(*args, **kwargs)
-            return torch.LongTensor([result])
+            return torch.Tensor(result)
 
         return wrapped
 
     
     @staticmethod
-    @return_tensor.__func__
     def get_sparse_label(csv_df, idx):
         
         """ 

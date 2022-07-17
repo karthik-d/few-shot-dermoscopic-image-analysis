@@ -40,5 +40,7 @@ class MetaDerm(nn.Module):
         )
 
     def forward(self, x):
+        print("HERE", x.shape)
         x = self.encoder(x)
+        print(x.shape)
         return x.view(x.size(0), -1)
