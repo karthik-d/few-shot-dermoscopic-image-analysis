@@ -2,7 +2,13 @@ import torch
 import numpy as np
 from sklearn import metrics
 
-from classifiers import logistic_classifier, linear_svm, polynomial_svm
+from classifiers import (
+    logistic_classifier, 
+    linear_svm, 
+    polynomial_svm, 
+    decision_tree, 
+    nearest_neighbor
+)
 
 
 def get_local_classifier(classifier_name='LR', sampler=None):
@@ -13,7 +19,10 @@ def get_local_classifier(classifier_name='LR', sampler=None):
         classifier = linear_svm
     elif classifier_name == 'P_SVM':
         classifier = polynomial_svm
-        print("BOUND")
+    elif classifier_name == 'NN':
+        classifier = nearest_neighbor
+    elif classifier_name == 'DTree':
+        classifier = decision_tree
 
     def local_classifier(input, target, get_prediction_results=False):
 
