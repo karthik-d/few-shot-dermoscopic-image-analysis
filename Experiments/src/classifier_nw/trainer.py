@@ -99,7 +99,7 @@ def init_dataloader_nonmeta(config, data_config, mode):
     )
 
 
-def init_loss_fn(sampler, mode):
+def init_loss_fn(data_config, sampler, mode):
     
     # bind sampler and return loss function
     if mode in ['train', 'val']:

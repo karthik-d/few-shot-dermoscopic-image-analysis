@@ -1,7 +1,7 @@
 from architectures.metaderm_lr import MetaDerm_LR
 from architectures.protonet import ProtoNet
 from .exhaustive_extended_batch_sampler import ExhaustiveExtendedBatchSampler
-from .prototypical_loss import get_prototypical_loss_fn
+from .local_classifier import get_local_classifier
 from . import transforms
 
 from prototypical.config import config
@@ -84,6 +84,21 @@ def init_loss_fn(sampler):
     return get_prototypical_loss_fn(sampler=sampler)
 
 
+def init_local_classifier(config, data_config, sampler, mode='test'):
+
+    if mode in ['train', 'val']:
+        class_names = data_config.train_classes 
+    else:
+        class_names = data_config.test_classes
+    
+    # bind sampler and classifier type, return loss function
+    return get_local_classifier(
+        class_names=class_names,
+        classifier_name=config.classifier_name,
+        sampler=sampler
+    )
+
+
 def init_protonet(config):
     
     """
@@ -101,7 +116,7 @@ def init_metaderm(config):
     """
 
     device = 'cuda:0' if (torch.cuda.is_available() and config.cuda) else 'cpu'
-    model = MetaDerm_LR(num_classes=None).to(device)
+    model = MetaDerm_LR(num_classes=None).to(device)  # Use as feature extractor
     print(model)
     return model
 
@@ -110,7 +125,7 @@ def compute_accuracy(labels, predictions):
     pass
 
 
-def run_concrete_test_loop(config, data_config, test_dataloader, loss_fn, model, dataset):
+def run_concrete_test_loop(config, data_config, test_dataloader, local_classifier, model, dataset):
     
     """ 
     Run a trained model through the test dataset
@@ -194,7 +209,12 @@ def test():
         mode='test'
     )
 
-    loss_fn = get_prototypical_loss_fn(sampler)
+    local_classifier = init_local_classifier(
+        config, 
+        data_config,
+        sampler,
+        mode='test'
+    )
 
     # load model
     model = init_metaderm(config)
@@ -215,7 +235,7 @@ def test():
         config=config,
         data_config=data_config,
         test_dataloader=test_dataloader,
-        loss_fn=loss_fn,
+        local_classifier=local_classifier,
         model=model,
         dataset=test_dataset
     )

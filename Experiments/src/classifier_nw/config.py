@@ -55,3 +55,10 @@ config.update(
         nonmeta_batchsize_val = 64
     )
 )
+
+
+config.update(
+    DotDict(
+        classifier_name = 'LR'
+    )
+)
