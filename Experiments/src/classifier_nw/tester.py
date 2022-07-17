@@ -45,11 +45,11 @@ def init_dataset(config, data_config, mode):
 
 def init_sampler(config, data_config, labels, mode):
 
-    if mode == 'train':
+    if mode in ['train', 'val']:
         classes_per_it = config.classes_per_it_tr
         num_samples = config.num_support_tr + config.num_query_tr
     else:
-        classes_per_it = config.classes_per_it_val
+        classes_per_it = config.classes_per_it_test
         num_samples = config.num_support_val + config.num_query_val
 
     # Initialize and return the batch sampler 
@@ -215,8 +215,8 @@ def test():
     # )
 
     model_path = os.path.join(
-        # '/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_1',
-        config.logs_path,
+        '/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_3',
+        # config.logs_path,
         'best_model.pth'
     )
     model.load_state_dict(torch.load(model_path), strict=False)

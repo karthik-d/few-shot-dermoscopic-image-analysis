@@ -83,8 +83,6 @@ class ExhaustiveExtendedBatchSampler(object):
         # - For every class c, fill the corresponding row with the indices of samples belonging to c
         #   `numel_per_class` stores the number of samples for each class/row
         for idx, label in enumerate(self.labels):
-            print(label)
-            print(self.classes)
             sample_idx = np.argwhere(self.classes == label).item()
             self.indexes[
                 sample_idx, 
