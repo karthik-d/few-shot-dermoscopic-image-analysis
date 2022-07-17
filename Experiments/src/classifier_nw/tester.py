@@ -122,6 +122,20 @@ def run_concrete_test_loop(config, data_config, test_dataloader, local_classifie
     Run a trained model through the test dataset
     """
 
+    def fill_other_probs(probs, curr_support, dataset):
+        
+        id_prob_map = dict(zip(
+            curr_support,
+            probs
+        ))
+
+        probs_ = []
+        for class_id in sorted(dataset.get_class_ids(data_config.test_classes)):
+            probs_.append(id_prob_map.get(class_id, 0))  
+        
+        return probs_
+
+
     device = 'cuda:0' if (torch.cuda.is_available() and config.cuda) else 'cpu'
     avg_acc = []
 
@@ -130,6 +144,7 @@ def run_concrete_test_loop(config, data_config, test_dataloader, local_classifie
 
         all_predictions = torch.tensor([], dtype=torch.long)
         all_truths = torch.tensor([], dtype=torch.long)
+        all_probs = torch.tensor([], dtype=torch.long)
         test_iter = iter(test_dataloader)
         for batch in tqdm(test_iter):
             x, y = batch
@@ -145,7 +160,7 @@ def run_concrete_test_loop(config, data_config, test_dataloader, local_classifie
                 y = y.to(device)      
             
             model_output = model(x)
-            acc, (predictions, truths, probs) = local_classifier(
+            acc, (predictions, truths, probs, curr_support) = local_classifier(
                 model_output,
                 y,
                 get_prediction_results=True
@@ -164,18 +179,24 @@ def run_concrete_test_loop(config, data_config, test_dataloader, local_classifie
                 all_truths,
                 truths
             ])
-
+              
             # gather probs
+            probs = fill_other_probs(probs, curr_support, ISIC18_T3_Dataset)
             all_probs = torch.cat([
                 all_probs,
                 probs
             ])
 
         avg_acc_val = np.mean(avg_acc)
-        avg_auc_val = metrics.roc_auc_score(all_truths, all_probs)
         print(f'\nAverage Test Acc: {avg_acc_val}')
+
+        avg_auc_val = metrics.roc_auc_score(
+            all_truths, 
+            all_probs, 
+            multi_class='ovr'
+        )
         print(f'\nAverage Test AUC: {avg_auc_val}')
-        
+
         confusion_matrix = displayers.get_printable_confusion_matrix(
             all_labels=all_truths.detach().numpy(),
             all_predictions=all_predictions.detach().numpy(),

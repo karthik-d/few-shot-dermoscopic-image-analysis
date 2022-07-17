@@ -57,7 +57,7 @@ def get_local_classifier(classifier_name='LR', sampler=None):
                 (
                     torch.LongTensor(query_preds),
                     query_truths,
-                    torch.LongTensor(query_probs),
+                    torch.Tensor(query_probs),
                 )
             )
 

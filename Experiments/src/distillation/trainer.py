@@ -66,8 +66,8 @@ def run_concrete_train_loop(epoch, train_loader, module_list, criterion_list, op
                   f'Acc: {np.mean(acc_vals)}\t')
 
     print(f'Loss: {np.mean(losses)}\tAcc: {np.mean(acc_vals)}\t'))
-
     return np.mean(acc_vals), np.mean(losses)
+
 
 def train():
 
