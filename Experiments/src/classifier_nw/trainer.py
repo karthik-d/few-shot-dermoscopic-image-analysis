@@ -2,7 +2,7 @@ from architectures.metaderm import MetaDerm
 from architectures.protonet import ProtoNet
 from architectures.metaderm_lr import MetaDerm_LR
 from .prototypical_batch_sampler import PrototypicalBatchSampler
-from .prototypical_loss import get_prototypical_loss_fn
+from .crossentropy_loss import get_prototypical_loss_fn
 from . import transforms
 #from omniglot_dataset import OmniglotDataset
 
@@ -103,6 +103,11 @@ def init_loss_fn(sampler):
     
     # bind sampler and return loss function
     return get_prototypical_loss_fn(sampler=sampler)
+
+
+def init_loss_fn_nonmeta():
+
+    return get_prototypical_loss_fn(sampler=None)
 
 
 def init_protonet(config):
@@ -247,7 +252,7 @@ def run_concrete_train_loop(
         avg_acc_val = np.mean(val_acc[-config.iterations:])
 
         
-        # Save best model --> replaced if it beats current best ( don't consider VAL set for now)
+        # Save best model --> replaced if it beats current best
         if avg_acc >= best_acc:
             torch.save(model.state_dict(), best_model_path)
             best_acc = avg_acc
@@ -358,23 +363,19 @@ def train():
 
     init_seed(config)
 
-    tr_dataloader, tr_sampler = init_dataloader(
+    tr_dataloader, tr_sampler = init_dataloader_nonmeta(
         config=config, 
         data_config=data_config,
         mode='train'
     )
-    val_dataloader, val_sampler = init_dataloader(
+    val_dataloader, val_sampler = init_dataloader_nonmeta(
         config=config, 
         data_config=data_config,
         mode='val'
     )
 
-    tr_loss_fn = init_loss_fn(
-        sampler=tr_sampler
-    )
-    val_loss_fn = init_loss_fn(
-        sampler=val_sampler
-    )
+    tr_loss_fn = init_loss_fn_nonmeta()
+    val_loss_fn = init_loss_fn_nonmeta()
 
     model = init_metaderm(config)
     optim = init_optim(config, model)
