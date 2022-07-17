@@ -1,6 +1,8 @@
 from .metaderm import MetaDerm 
 
 
+# TODO: Transform into a common embedder, with backbone selection
+
 class MetaDerm_LR(nn.Module):
     
     """
