@@ -10,6 +10,7 @@ from data.ISIC18_T3_Dataset import ISIC18_T3_Dataset
 from utils import helpers, displayers
 
 from sklearn import metrics
+from scipy import special
 from tqdm import tqdm
 from torch.utils.data import DataLoader
 from matplotlib import pyplot as plot
@@ -126,14 +127,15 @@ def run_concrete_test_loop(config, data_config, test_dataloader, local_classifie
         
         id_prob_map = dict(zip(
             curr_support,
-            probs
+            probs.detach().numpy()[0]
         ))
 
         probs_ = []
         for class_id in sorted(dataset.get_class_ids(data_config.test_classes)):
-            probs_.append(id_prob_map.get(class_id, 0))  
+            probs_.append(id_prob_map.get(class_id, 1-sum(probs_)))  
         
-        return probs_
+        probs_ = special.softmax(probs_)
+        return torch.LongTensor([probs_])
 
 
     device = 'cuda:0' if (torch.cuda.is_available() and config.cuda) else 'cpu'

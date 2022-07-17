@@ -13,6 +13,7 @@ def get_local_classifier(classifier_name='LR', sampler=None):
         classifier = linear_svm
     elif classifier_name == 'P_SVM':
         classifier = polynomial_svm
+        print("BOUND")
 
     def local_classifier(input, target, get_prediction_results=False):
 
@@ -62,6 +63,7 @@ def get_local_classifier(classifier_name='LR', sampler=None):
                     torch.LongTensor(query_preds),
                     query_truths,
                     torch.Tensor(query_probs),
+                    classes
                 )
             )
 

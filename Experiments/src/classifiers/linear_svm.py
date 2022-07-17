@@ -7,10 +7,11 @@ def fit_predict(support_X, support_y, query):
     
     clf = make_pipeline(
         StandardScaler(), 
-        SVC(
+        svm.SVC(
             gamma='auto',
             kernel='linear',
-            decision_function_shape='ovr'
+            decision_function_shape='ovr',
+            probability=True
         )
     )
     
