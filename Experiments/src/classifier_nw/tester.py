@@ -132,17 +132,19 @@ def run_concrete_test_loop(config, data_config, test_dataloader, local_classifie
 
         probs_ = []
         for class_id in sorted(dataset.get_class_ids(data_config.test_classes)):
-            probs_.append(id_prob_map.get(class_id, 1-sum(probs_)))  
+            probs_.append(round(id_prob_map.get(class_id, 0), 4))  
         
-        probs_ = special.softmax(probs_)
-        return torch.LongTensor([probs_])
-
+        if(sum(probs_)!=1):
+            probs_[-1] += 1-sum(probs_)
+        assert sum(probs_)==1, probs_
+        probs_ = torch.Tensor([probs_])
+        return probs_
 
     device = 'cuda:0' if (torch.cuda.is_available() and config.cuda) else 'cpu'
     avg_acc = []
 
     # Test as average of 5 iterations
-    for epoch in range(5):
+    for epoch in range(2):
 
         all_predictions = torch.tensor([], dtype=torch.long)
         all_truths = torch.tensor([], dtype=torch.long)
@@ -199,13 +201,13 @@ def run_concrete_test_loop(config, data_config, test_dataloader, local_classifie
         )
         print(f'\nAverage Test AUC: {avg_auc_val}')
 
-        confusion_matrix = displayers.get_printable_confusion_matrix(
-            all_labels=all_truths.detach().numpy(),
-            all_predictions=all_predictions.detach().numpy(),
-            classes=data_config.test_classes
-        )
-        print("\nClassification Confusion Matrix\n")
-        print(confusion_matrix)
+        # confusion_matrix = displayers.get_printable_confusion_matrix(
+        #     all_labels=all_truths.detach().numpy(),
+        #     all_predictions=all_predictions.detach().numpy(),
+        #     classes=data_config.test_classes
+        # )
+        # print("\nClassification Confusion Matrix\n")
+        # print(confusion_matrix)
     
     # Compute average stats
     avg_acc_val = np.mean(avg_acc)
