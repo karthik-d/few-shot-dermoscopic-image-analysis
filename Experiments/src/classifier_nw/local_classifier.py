@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 
 from classifiers import logistic_classifier
 
@@ -41,12 +42,13 @@ def get_local_classifier(classifier_name='LR', sampler=None):
         query_truths = target_cpu[query_idxs]
 
         query_preds = classifier.fit_predict(
-            support_samples,
-            support_truths,
-            query_samples
+            support_samples.detach().numpy(),
+            support_truths.detach().numpy(),
+            query_samples.detach().numpy()
         )
 
-        acc_val = query_truths.eq(query_preds).float().mean()    
+        print(query_preds)
+        acc_val = np.count_nonzero(query_truths==query_preds)/len(query_truths)    
 
         if not get_prediction_results:
             return acc_val
