@@ -1,6 +1,7 @@
 from architectures.metaderm import MetaDerm
 from architectures.protonet import ProtoNet
 from architectures.metaderm_lr import MetaDerm_LR
+from architectures.resnet18_lr import ResNet18_LR
 from .prototypical_batch_sampler import PrototypicalBatchSampler
 from .crossentropy_loss import get_crossentropy_loss_fn
 from . import transforms
@@ -143,7 +144,7 @@ def init_metaderm(config, data_config):
     """
 
     device = 'cuda:0' if (torch.cuda.is_available() and config.cuda) else 'cpu'
-    model = MetaDerm_LR(
+    model = ResNet18_LR(
         num_classes=len(data_config.train_classes)
     ).to(device)
 

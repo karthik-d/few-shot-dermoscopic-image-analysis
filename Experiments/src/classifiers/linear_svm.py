@@ -6,6 +6,7 @@ from sklearn.preprocessing import StandardScaler
 def fit_predict(support_X, support_y, query):
     
     clf = make_pipeline(
+        StandardScaler(), 
         svm.SVC(
             gamma='auto',
             kernel='linear',
