@@ -48,3 +48,10 @@ config.update(
     )
 )
 
+
+config.update(
+    DotDict(
+        nonmeta_batchsize_tr = 64,
+        nonmeta_batchsize_val = 64
+    )
+)

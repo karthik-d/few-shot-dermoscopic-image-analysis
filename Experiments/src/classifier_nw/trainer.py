@@ -70,7 +70,7 @@ def init_sampler(config, labels, mode):
 
 def init_dataloader(config, data_config, mode):
 
-    # Make dataset and samples
+    # Make dataset and sampler
     dataset = init_dataset(config, data_config, mode)
     sampler = init_sampler(config, dataset.labels, mode)
     
@@ -79,6 +79,24 @@ def init_dataloader(config, data_config, mode):
         dataset, 
         batch_sampler=sampler
     ), sampler
+
+
+def init_dataloader_nonmeta(config, data_config, mode):
+
+    # Make dataset 
+    dataset = init_dataset(config, data_config, mode)
+
+    if mode == 'train':
+        batch_size = config.nonmeta_batchsize_tr
+    elif mode == 'val':
+        batch_size = config.nonmeta_batchsize_val
+
+    # Wrap dataset into dataloader
+    return torch.utils.data.DataLoader(
+        dataset,
+        batch_size=batch_size,
+        shuffle=True
+    )
 
 
 def init_loss_fn(sampler):

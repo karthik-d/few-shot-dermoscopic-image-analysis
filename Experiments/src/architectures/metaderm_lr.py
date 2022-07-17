@@ -28,7 +28,7 @@ class MetaDerm_LR(nn.Module):
         feature_vec = output.view(output.size(0), -1)
         # Pass through classifier
         if self.num_classes is not None:
-            output = self.classifier()        
+            output = self.classifier(output)        
         # Conditional return
         if get_feat_vec:
             return feat_vec, output 
