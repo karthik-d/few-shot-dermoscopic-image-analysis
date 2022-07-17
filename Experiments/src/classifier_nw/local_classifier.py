@@ -1,5 +1,6 @@
 import torch
 import numpy as np
+from sklearn import metrics
 
 from classifiers import logistic_classifier
 
@@ -40,21 +41,23 @@ def get_local_classifier(classifier_name='LR', sampler=None):
         query_samples = input_cpu[query_idxs]
         query_truths = target_cpu[query_idxs]
 
-        query_preds = classifier.fit_predict(
+        print(support_truths)
+        query_preds, query_probs = classifier.fit_predict(
             support_samples.detach().numpy(),
             support_truths.detach().numpy(),
             query_samples.detach().numpy()
         )
 
-        acc_val = np.count_nonzero(query_truths.detach().numpy()==query_preds)/len(query_truths)  
+        acc_val = np.count_nonzero(query_truths.detach().numpy()==query_preds)/len(query_truths)
         if not get_prediction_results:
             return acc_val
         else:
             return (
-                acc_val, 
+                acc_val,
                 (
                     torch.LongTensor(query_preds),
-                    query_truths
+                    query_truths,
+                    torch.LongTensor(query_probs),
                 )
             )
 

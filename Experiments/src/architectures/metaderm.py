@@ -9,9 +9,9 @@ def conv_block(in_channels, out_channels):
 
     return nn.Sequential(
         nn.Conv2d(in_channels, out_channels, 3, padding=1),
-        nn.MaxPool2d(2),
         nn.BatchNorm2d(out_channels),
         nn.ReLU(),
+        nn.MaxPool2d(2)
     )
 
 
@@ -28,7 +28,7 @@ class MetaDerm(nn.Module):
     ```
     """
     
-    def __init__(self, x_dim=3, hid_dim=32, z_dim=32):
+    def __init__(self, x_dim=3, hid_dim=64, z_dim=64):
         super(MetaDerm, self).__init__()
         self.encoder = nn.Sequential(
             conv_block(x_dim, hid_dim),

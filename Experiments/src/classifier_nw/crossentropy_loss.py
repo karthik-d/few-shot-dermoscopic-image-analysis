@@ -55,17 +55,18 @@ def get_crossentropy_loss_fn(classes, sampler=None):
             return acc_val
 
         input_cpu = input.to('cpu')
-        if isinstance(target, int):
-            class_posn = classes.index(target)
-        else:
-            class_posn = classes.index(target.item())
-        
-        class_posn_cpu = torch.LongTensor([class_posn]).to('cpu')
+        class_posns_cpu = torch.LongTensor(
+            [
+                classes.index(x)
+                for x in target
+            ]
+        ).to('cpu')
+
         return (
-            loss_fn(input_cpu, class_posn_cpu), 
+            loss_fn(input_cpu, class_posns_cpu), 
             accuracy(
                 input_cpu, 
-                class_posn_cpu.unsqueeze(0)
+                class_posns_cpu.unsqueeze(0)
             )
         )
 

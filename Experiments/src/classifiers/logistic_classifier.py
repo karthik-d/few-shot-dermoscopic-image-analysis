@@ -12,5 +12,6 @@ def fit_predict(support_X, support_y, query):
 
     clf.fit(support_X, support_y)
     query_pred = clf.predict(query)
+    query_prob = clf.predict_proba(query)
 
-    return query_pred
+    return query_pred, query_prob

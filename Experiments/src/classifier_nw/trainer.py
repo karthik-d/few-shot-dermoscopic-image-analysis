@@ -414,6 +414,14 @@ def train():
     val_loss_fn = init_loss_fn_nonmeta(mode='val')
 
     model = init_metaderm(config, data_config)
+
+    # Continue training
+    model_path = os.path.join(
+        config.logs_path, 
+        'best_model.pth'
+    )
+    model.load_state_dict(torch.load(model_path), strict=False)
+
     optim = init_optim(config, model)
     lr_scheduler = init_lr_scheduler(config, optim)
     train_stats = run_concrete_train_loop(

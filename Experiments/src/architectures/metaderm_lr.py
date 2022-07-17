@@ -25,7 +25,7 @@ class MetaDerm_LR(MetaDerm):
         self.num_classes = num_classes
         if self.num_classes is not None:
             self.avgpool = nn.AdaptiveAvgPool2d(1)
-            self.classifier = nn.Linear(32, self.num_classes)
+            self.classifier = nn.Linear(64, self.num_classes)
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):

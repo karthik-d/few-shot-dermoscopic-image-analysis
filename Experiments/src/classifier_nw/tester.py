@@ -9,6 +9,7 @@ from data.config import config as data_config
 from data.ISIC18_T3_Dataset import ISIC18_T3_Dataset
 from utils import helpers, displayers
 
+from sklearn import metrics
 from tqdm import tqdm
 from torch.utils.data import DataLoader
 from matplotlib import pyplot as plot
@@ -144,7 +145,7 @@ def run_concrete_test_loop(config, data_config, test_dataloader, local_classifie
                 y = y.to(device)      
             
             model_output = model(x)
-            acc, (predictions, truths) = local_classifier(
+            acc, (predictions, truths, probs) = local_classifier(
                 model_output,
                 y,
                 get_prediction_results=True
@@ -164,8 +165,16 @@ def run_concrete_test_loop(config, data_config, test_dataloader, local_classifie
                 truths
             ])
 
+            # gather probs
+            all_probs = torch.cat([
+                all_probs,
+                probs
+            ])
+
         avg_acc_val = np.mean(avg_acc)
+        avg_auc_val = metrics.roc_auc_score(all_truths, all_probs)
         print(f'\nAverage Test Acc: {avg_acc_val}')
+        print(f'\nAverage Test AUC: {avg_auc_val}')
         
         confusion_matrix = displayers.get_printable_confusion_matrix(
             all_labels=all_truths.detach().numpy(),
@@ -215,10 +224,11 @@ def test():
     # )
 
     model_path = os.path.join(
-        '/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_3',
-        # config.logs_path,
+        # '/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_3',
+        config.logs_path,
         'best_model.pth'
     )
+    print(f"Model loaded from {model_path}")
     model.load_state_dict(torch.load(model_path), strict=False)
 
     # run test
