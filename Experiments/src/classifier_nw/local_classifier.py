@@ -2,13 +2,17 @@ import torch
 import numpy as np
 from sklearn import metrics
 
-from classifiers import logistic_classifier
+from classifiers import logistic_classifier, linear_svm, polynomial_svm
 
 
 def get_local_classifier(classifier_name='LR', sampler=None):
 
     if classifier_name == 'LR':
         classifier = logistic_classifier
+    elif classifier_name == 'L_SVM':
+        classifier = linear_svm
+    elif classifier_name == 'P_SVM':
+        classifier = polynomial_svm
 
     def local_classifier(input, target, get_prediction_results=False):
 
