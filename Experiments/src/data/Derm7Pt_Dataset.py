@@ -14,7 +14,13 @@ class Derm7Pt_Dataset(Dataset):
     torch with the Derm7Pt T3 Dataset
     """
 
-    class_id_map = dict()
+    class_id_map = dict(
+        BCC = 0,
+        NEV = 1,
+        MEL = 2,
+        MISC = 3,
+        SK = 4,
+    )
 
 
     def __init__(self, root, mode='train', img_type='derm', allowed_labels=None, transform=None, target_transform=None):
@@ -51,10 +57,10 @@ class Derm7Pt_Dataset(Dataset):
                                                     valid_indexes=valid_indexes, 
                                                     test_indexes=test_indexes)
 
-        Derm7Pt_Dataset.class_id_map = {
-            label: idx 
-            for idx, label in enumerate(derm_data_group.get_label_by_abbrev('DIAG').abbrevs.values)
-        }
+        # Derm7Pt_Dataset.class_id_map = {
+        #     label: idx 
+        #     for idx, label in enumerate(derm_data_group.get_label_by_abbrev('DIAG').abbrevs.values)
+        # }
 
         if mode == 'val':
             mode = 'valid'
@@ -80,7 +86,7 @@ class Derm7Pt_Dataset(Dataset):
         self.class_names = list(self.class_id_map.keys())
         # All `target` values of the dataset      
 
-        print(f"Getting '{mode}' data from {self.img_base_path} and {self.mode}")
+        print(f"Getting '{mode}' data from {self.img_base_path} and {allowed_labels}")
 
 
     def __len__(self):

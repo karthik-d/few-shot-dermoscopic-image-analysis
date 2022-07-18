@@ -32,13 +32,25 @@ def init_seed(config):
 
 def init_dataset(config, data_config, mode):
 
+    if mode in ['train', 'val']:
+        allowed_labels = Derm7Pt_Dataset.get_class_ids(
+            data_config.derm7pt_train_classes
+        )
+    else:
+        allowed_labels = Derm7Pt_Dataset.get_class_ids(
+            data_config.derm7pt_test_classes
+        )
+
     dataset = Derm7Pt_Dataset(
         mode=mode, 
         root=data_config.derm7pt_root_path,
         transform=transforms.compose_transforms([
             transforms.get_resize_transform()
-        ])
+        ]),
+        allowed_labels=allowed_labels
     )
+
+    print(len(dataset))
 
     # Ensure classes count
     if dataset.num_classes < config.classes_per_it_tr or dataset.num_classes < config.classes_per_it_val:
@@ -440,27 +452,6 @@ def train():
     )
     best_state, best_acc, train_loss, train_acc, val_loss, val_acc = train_stats
 
-
-def run():
-
-    training_data = Derm7Pt_Dataset(
-	    data_config.derm7pt_root_path,
-        mode='train',
-        img_type='derm'
-	)
-
-    train_dataloader = DataLoader(
-        training_data, 
-        batch_size=8, 
-        shuffle=True
-    )
-
-    imgs, labels = next(iter(train_dataloader))
-    print(labels[0].squeeze())
-    plot.imshow(imgs[0])
-    plot.show()
-
-    print("Works!")
 
 if __name__ == '__main__':
     # main()
