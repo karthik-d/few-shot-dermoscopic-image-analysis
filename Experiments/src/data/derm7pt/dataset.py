@@ -4,8 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import keras
 from keras.preprocessing.image import load_img
-from utils import strings2numeric
-from kerasutils import crop_resize_img
+from .utils import strings2numeric
+from .kerasutils import crop_resize_img
 
 
 class Derm7PtDataset(object):

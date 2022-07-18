@@ -6,9 +6,9 @@ from sklearn.preprocessing import StandardScaler
 def fit_predict(support_X, support_y, query):
     
     clf = make_pipeline(
-        StandardScaler(),
+        # StandardScaler(),
         KNeighborsClassifier(
-            n_neighbors=5,
+            n_neighbors=2,
             weights='uniform', 
             algorithm='auto'
         )

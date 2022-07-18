@@ -40,7 +40,9 @@ val_labels = derm_data_group.get_labels(data_type='valid', one_hot=False)
 # print(derm_data.df.diagnosis.unique())
 print(train_labels['DIAG'].value_counts())
 print(val_labels['DIAG'].value_counts())
-print(test_labels['DIAG'].value_counts())
-
+print(test_labels['DIAG'].values_counts())
 label_names = derm_data_group.get_label_by_abbrev('DIAG').abbrevs.values
 print(label_names)
+print(derm_data.get_label_abbrevs('DIAG'))
+print(derm_data.get_label_nums('DIAG'))
+print(derm_data.get_column_name_numeric('DIAG'))

@@ -114,7 +114,7 @@ def init_metaderm(config):
     """
 
     device = 'cuda:0' if (torch.cuda.is_available() and config.cuda) else 'cpu'
-    model = ResNet18_LR(num_classes=None).to(device)  # Use as feature extractor
+    model = ResNet50_LR(num_classes=None).to(device)  # Use as feature extractor
     print(model)
     return model
 
@@ -253,7 +253,7 @@ def test():
     model_path = os.path.join(
         # '/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_3',
         '/home/miruna/Skin-FSL/repo/Experiments/logs/prediction-weights/',
-        'Resnet18-2-Best.pth'
+        'Resnet50-Last.pth'
     )
     print(f"Model loaded from {model_path}")
     model.load_state_dict(torch.load(model_path), strict=False)

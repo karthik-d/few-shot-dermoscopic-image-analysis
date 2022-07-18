@@ -26,7 +26,8 @@ config.update(
         isic18_t3_root_path = os.path.join(
             config.data_root_path, 
             'ISIC18-T3'
-        ) 
+        ),
+        derm7pt_root_path = '/home/miruna/Skin-FSL/Derm7pt/release_v0'
         # isic18_t3_root_path = "/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_1"
     )
 )
@@ -60,6 +61,15 @@ config.update(
             'NV',
             'BCC',
             'BKL'
+        ],
+        derm7pt_test_classes = [
+            'BCC',
+            'SK',
+            'MISC'
+        ],
+        derm7pt_train_classes = [
+            'NEV',
+            'MEL'
         ]
     )
 )
