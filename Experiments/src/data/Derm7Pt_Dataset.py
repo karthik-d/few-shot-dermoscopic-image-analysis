@@ -17,7 +17,7 @@ class Derm7Pt_Dataset(Dataset):
     class_id_map = dict()
 
 
-    def __init__(self, root, mode='train', img_type='derm', transform=None, target_transform=None):
+    def __init__(self, root, mode='train', img_type='derm', allowed_labels=None, transform=None, target_transform=None):
         
         """
         Initialize the Dataset
@@ -59,8 +59,15 @@ class Derm7Pt_Dataset(Dataset):
         if mode == 'val':
             mode = 'valid'
         self.mode = mode
-        self.path_list = derm_data_group.get_img_paths(data_type=mode, img_type=img_type)
-        self.labels_df = derm_data_group.get_labels(data_type=mode, one_hot=False)['DIAG']
+        
+        _path_list = derm_data_group.get_img_paths(data_type=mode, img_type=img_type)
+        _labels_df = derm_data_group.get_labels(data_type=mode, one_hot=False)['DIAG']
+        self.path_list = []
+        self.labels = []
+        for label, path in zip(_labels_df, _path_list):
+            if label in allowed_labels:
+                self.path_list.append(path)
+                self.labels.append(label)
         
         # Ensure data path validity
         self.img_base_path = root
@@ -71,8 +78,7 @@ class Derm7Pt_Dataset(Dataset):
         
         self.num_classes = len(self.class_id_map)
         self.class_names = list(self.class_id_map.keys())
-        # All `target` values of the dataset        
-        self.labels = list(self.labels_df.values)
+        # All `target` values of the dataset      
 
         print(f"Getting '{mode}' data from {self.img_base_path} and {self.mode}")
 
