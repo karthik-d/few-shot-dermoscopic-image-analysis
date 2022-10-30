@@ -1,10 +1,16 @@
-#  Few-Shot-Learning-Skin-Analysis
+#  Few-Shot Learning for Skin Analysis
 
 Model building, experiments, references and source code for the research work on skin image analysis using few-shot learning 
 
-## Summary and Links to Papers
+## Proposed Embedding-Network & Base-Learner Approach for Meta Learning
 
-### *Baseline Reference* - [[CVPR-2020] Meta-DermDiagnosis Few-Shot Skin Disease Identification using Meta-Learning.pdf](./Literature/%5BCVPR-2020%5D%20Meta-DermDiagnosis%20Few-Shot%20Skin%20Disease%20Identification%20using%20Meta-Learning.pdf)
+This work proposes a two-stage approach: a baseline supervised learner on the meta-training set that allows a network to learn highly representative and generalizable feature embeddings for images, that are readily transferable to new few-shot learning tasks; positing that a representative feature embedding can be more effective than complex meta-learning algorithms, a simple linear classifiers is trained atop these representations.
+
+![flow-diagram](./assets/figures/embedding-metalearning-flow.png)
+
+## Key References
+
+### [[CVPR-2020] Meta-DermDiagnosis Few-Shot Skin Disease Identification using Meta-Learning.pdf](./Literature/%5BCVPR-2020%5D%20Meta-DermDiagnosis%20Few-Shot%20Skin%20Disease%20Identification%20using%20Meta-Learning.pdf)
 
 - Proposes the use of meta-learning techniques for efficient model adaptation for extremely low-data scenarios
 - Applies Group equivariant convolutions (G-convolutions) in place of the normal spatial convolution filters
