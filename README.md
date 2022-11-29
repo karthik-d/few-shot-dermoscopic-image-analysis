@@ -1,10 +1,10 @@
 #  Few-Shot Learning for Skin Analysis
 
-Model building, experiments, references and source code for the research work on skin image analysis using few-shot learning 
+Model building, experiments, references and source code for the research work on skin image analysis using few-shot learning. 
 
 ## Cite Us
 
-[Link to the Research Paper](https://arxiv.org/abs/2210.16954)
+[Link to the Research Paper Preprint](https://arxiv.org/abs/2210.16954)
 
 If you find our work useful in your research, cite us:
 
