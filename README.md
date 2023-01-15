@@ -1,4 +1,4 @@
-#  Few-Shot Learning for Skin Analysis
+#  Dermoscopic Image Analysis for Lesion Detection using Few-Shot Learning
 
 Model building, experiments, references and source-code for the research work on skin image analysis using few-shot learning. 
 
