@@ -1,12 +1,12 @@
 #  Dermoscopic Image Analysis for Lesion Detection using Few-Shot Learning
 
-Model building, experiments, references and source-code for the research work on skin image analysis using few-shot learning. 
+Model building, experiments, references, and source code for the research work on skin image analysis using few-shot learning. 
 
 ## Cite Us
 
-[Link to the Research Paper Preprint](https://arxiv.org/abs/2210.16954)
+[Link to the Research Paper (preprint)](https://arxiv.org/abs/2210.16954)
 
-If you find our work useful in your research, cite us:
+If you find our work useful in your research, don't forget to cite us:
 
 ```
 @article{https://doi.org/10.48550/arxiv.2210.16954,
@@ -21,11 +21,18 @@ If you find our work useful in your research, cite us:
 }
 ```
 
-## Proposed Embedding-Network & Base-Learner Approach for Meta Learning
+### Motivation
 
-This work proposes a two-stage approach: a baseline supervised learner on the meta-training set that allows a network to learn highly representative and generalizable feature embeddings for images, that are readily transferable to new few-shot learning tasks; positing that a representative feature embedding can be more effective than complex meta-learning algorithms, a simple linear classifiers is trained atop these representations.
+Annotated images and ground truth for the **diagnosis of rare and novel diseases** are scarce. This is expected to prevail, considering the small number of affected patient population and limited specialized clinical expertise to annotate images. Further, the frequently occurring **long-tailed class dataset distributions** in skin lesion and other disease classification datasets cause conventional training approaches to lead to **poor generalization** due to **biased class priors**. Few-shot learning, and meta-learning in general, aim to overcome these issues by **attempting to perform well in low data regimes**. 
 
-![flow-diagram](./assets/figures/embedding-metalearning-flow.png)
+### Proposed Embedding Network & Base-Learner Approach for Meta-Learning
+
+This work focuses on improving meta-learning for the **characterization of lesion types** from dermoscopic images.   
+Specifically, it proposes a two-stage training and inference approach,
+- A **baseline supervised learner** on the meta-training set that allows a network to learn highly representative and generalizable feature embeddings for images, that are readily transferable to new few-shot learning tasks.
+- Positing that a representative feature embedding can be more effective than complex meta-learning algorithms, a **simple classifier** is trained atop these representations for downstream classification into lesion types.
+
+  ![flow-diagram](./assets/figures/embedding-metalearning-flow.png)
 
 ## Key References
 
