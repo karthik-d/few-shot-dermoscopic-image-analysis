@@ -39,7 +39,7 @@ Specifically, it proposes a two-stage training and inference approach,
 - A **baseline supervised learner** on the meta-training set that allows a network to learn highly representative and generalizable feature embeddings for images, that are readily transferable to new few-shot learning tasks.
 - Positing that a representative feature embedding can be more effective than complex meta-learning algorithms, a **simple classifier** is trained atop these representations for downstream classification into lesion types.
 
-  ![flow-diagram](./assets/figures/embedding-metaleaning-flow-padded.png)
+  <img src="./assets/figures/embedding-metaleaning-flow-padded.png" width="600">
 
 ## Key References
 
