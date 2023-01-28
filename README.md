@@ -30,7 +30,9 @@ If you find our work useful in your research, don't forget to cite us:
 
 ## Motivation
 
-Annotated images and ground truth for the **diagnosis of rare and novel diseases** are scarce. This is expected to prevail, considering the small number of affected patient population and limited specialized clinical expertise to annotate images. Further, the frequently occurring **long-tailed class dataset distributions** in skin lesion and other disease classification datasets cause conventional training approaches to lead to **poor generalization** due to **biased class priors**. Few-shot learning, and meta-learning in general, aim to overcome these issues by **attempting to perform well in low data regimes**. 
+- Annotated images and ground truth for the **diagnosis of rare and novel diseases** are scarce. This is expected to prevail, considering the small number of affected patient population and limited specialized clinical expertise to annotate images. 
+- Further, the frequently occurring **long-tailed class dataset distributions** in skin lesion and other disease classification datasets cause conventional training approaches to lead to **poor generalization** due to **biased class priors**. 
+- Few-shot learning, and meta-learning in general, aim to overcome these issues by **attempting to perform well in low data regimes**. 
 
 ## Proposed Embedding Network & Base-Learner Approach for Meta-Learning
 
