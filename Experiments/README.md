@@ -40,6 +40,9 @@ Keeping all parameters fixed, and using the default architecture for the underly
   ```
   python run.py
   ```
+  
+- The following is a sample output when running the training experiment.
+  <img src="../Docs/assets/embedding-train-op.png" width="950" />
 
 ### Test the Embedding Network
 
@@ -62,3 +65,6 @@ Keeping all parameters fixed, and using the default architecture for the underly
   ```
   python run.py
   ```
+
+- The following is a sample output when running a test on the trained network.
+  <img src="../Docs/assets/embedding-test-op.png" width="950" />
