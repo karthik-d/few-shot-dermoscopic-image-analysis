@@ -22,12 +22,36 @@
 
 Keeping all parameters fixed, and using the default architecture for the underlying network, the following steps will train the embedding network.
 
+> **Note** that, by default, the model states after each epoch will be saved into `Experiments/logs/prototypical`.
+
 - Activate the conda environment set up in the previous stage.
   ```
   conda activate skin_fsl
   ```
 - Navigate to `Skin-FSL/prototypical/Experiments/src`.
 - Edit [run.py](src/run.py) and uncomment the line to call the trainer. The line is a function call like so: `trainer.train()`.
+  - To edit the file on a CLI interface, *nano* editor is a convenient option.
+    ```
+    nano run.py    (to open the file in nano editor)
+    ctrl+o         (to save changes)
+    ctrl+x         (to close the editor)
+    ```
+- Execute [run.py](src/run.py) (not context-sensitive).
+  ```
+  python run.py
+  ```
+
+### Test the Embedding Network
+
+> **Note** that the model state to be loaded for evaluation is set by default.
+> To change this, change the value assigned to variable `model_path` in [src/prototypical/tester_exhaustive.py](./src/prototypical/tester_exhaustive.py)
+
+- Activate the conda environment set up in the previous stage.
+  ```
+  conda activate skin_fsl
+  ```
+- Navigate to `Skin-FSL/prototypical/Experiments/src`.
+- Edit [run.py](src/run.py) and uncomment the line to call the tester. The line is a function call like so: `tester_exhaustive.test()`.
   - To edit the file on a CLI interface, *nano* editor is a convenient option.
     ```
     nano run.py    (to open the file in nano editor)
