@@ -192,7 +192,7 @@ def test():
     # )
 
     model_path = os.path.join(
-        '/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_1',
+        '/home/miruna/Skin-FSL/prototypical/Experiments/logs/prototypical',
         'best_model.pth'
     )
     model.load_state_dict(torch.load(model_path))
