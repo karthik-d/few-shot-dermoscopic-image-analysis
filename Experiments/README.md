@@ -1,0 +1,19 @@
+## Procedure to Execute Experiments
+
+> **Note** that the procedures mentioned here are to only train and batch-wise sample and test the embedding network.   
+> The remainder of the execution procedure is yet to be documents, but follows a similar workflow and can be traced through the modularly structured pluggable portions and the commented lines in [main.py](src/main.py).
+
+### Clone the repository and set up the Python environment
+  - This implementation used **anaconda** for managing libraries, and the environment can be reproduced using the dependency file: [dependencies.yml](./dependencies.yml).
+  - For instance, to clone the dependencies into a new environment, use,
+    ```
+    conda env create -f dependencies.yml
+    ```
+  - **Alternatively**, use `pip` manager to install the dependencies from the dependencies.txt](./dependencies.txt) file.
+      ```
+      pip install -r dependencies.txt
+      ```
+
+  #### Further References
+  - A detailed guide for managing anaconda environbments can be found at [anaconda's official page](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
+  - A helpful reference for managing pip packages can be [found here](https://note.nkmk.me/en/python-pip-install-requirements/).
