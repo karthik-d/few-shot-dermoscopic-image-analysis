@@ -6,8 +6,9 @@ Model building, experiments, references and source code for the research work on
 
 The following references will help in reproducing this implementation and to extend the experiments for further analyses.
 
-- [Dataset Sources, Splitting Phases, and Experiment Descriptions [Markdown]](./Experiments/data/README.md)
-- [Manuscript [PDF]](./Docs/Manuscript_arXiv.pdf)
+- [Procedure to Execute Training and Testing Experiments](./Experiments/README.md).
+- [Dataset Sources, Splitting Phases, and Experiment Descriptions [Markdown]](./Experiments/data/README.md).
+- [Manuscript [PDF]](./Docs/Manuscript_arXiv.pdf).
 
 ## Cite Us
 
