@@ -1,6 +1,6 @@
 #  Dermoscopic Image Analysis for Lesion Detection using Few-Shot Learning
 
-Model building, experiments, references and source code for the research work on skin image analysis that draws on meta-learning to improve performance in low data and imbalanced data regimes. 
+Model building, experiments, references, and sourcecode for the research work on skin image analysis that draws on meta-learning to improve performance in low data and imbalanced data regimes. 
 
 ## Quick Links
 
