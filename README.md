@@ -4,7 +4,7 @@ Model building, experiments, references, and sourcecode for the research work on
 
 ## Quick Links
 
-The following references will help in reproducing this implementation and to extend the experiments for further analyses.
+The following references will aid in reproducing this implementation, and to extend the experiments presented in the paper for further analyses.
 
 - [Procedure to Execute Training and Testing Experiments](./Experiments/README.md).
 - [Dataset Sources, Splitting Phases, and Experiment Descriptions [Markdown]](./Experiments/data/README.md).
