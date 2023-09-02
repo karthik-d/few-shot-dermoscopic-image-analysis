@@ -12,7 +12,7 @@ The following references will aid in reproducing this implementation, and to ext
 
 ## Cite Us
 
-[Link to the Research Paper (preprint)](https://arxiv.org/abs/2210.16954)
+[Link to the Research Paper (preprint version)](https://arxiv.org/abs/2210.16954).
 
 If you find our work useful in your research, don't forget to cite us:
 
