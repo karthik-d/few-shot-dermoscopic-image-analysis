@@ -2,7 +2,7 @@
 
 Model building, experiments, references, and source code for research w theork on skin image analysis that draws on meta-learning to improve performance in low data and imbalanced data regimes. 
 
-> This research was carried out in collaboration with the Machine Learning Research Group (MLRG) and the Departments of Computer Science and Information Technology at SSN College of Engineering, Anna University, India.
+> This research was carried out in collaboration with the [Machine Learning Research Group (MLRG)](https://www.researchgate.net/lab/Machine-Learning-Research-Group-Chandrabose-Aravindan) and the Departments of [Computer Science](https://www.ssn.edu.in/college-of-engineering/computer-science-and-engineering-department-ssn-institutions/) and [Information Technology](https://www.ssn.edu.in/college-of-engineering/information-technology-department-ssn-institutions/) at **SSN College of Engineering, Anna University**, India.
 
 ## Quick Links
 
