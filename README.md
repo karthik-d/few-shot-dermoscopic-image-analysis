@@ -2,6 +2,8 @@
 
 Model building, experiments, references, and source code for research w theork on skin image analysis that draws on meta-learning to improve performance in low data and imbalanced data regimes. 
 
+> This research was carried out in collaboration with the Machine Learning Research Group (MLRG) and the Departments of Computer Science and Information Technology at SSN College of Engineering, Anna University, India.
+
 ## Quick Links
 
 The following references will aid in reproducing this implementation, and to extend the experiments presented in the paper for further analyses.
