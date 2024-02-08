@@ -10,7 +10,7 @@ The following references will aid in reproducing this implementation, and to ext
 
 - [Procedure to Execute Training and Testing Experiments [Markdown]](./Experiments/README.md).
 - [Dataset Sources, Splitting Phases, and Experiment Descriptions [Markdown]](./Experiments/data/README.md).
-- [Manuscript [PDF]](./Docs/Manuscript_arXiv.pdf).
+- [Research Paper](https://arxiv.org/abs/2210.16954).
 
 ## Cite Us
 
