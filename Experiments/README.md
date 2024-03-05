@@ -13,6 +13,7 @@
       ```
       pip install -r dependencies.txt
       ```
+      
 
   #### Further References
   - A detailed guide for managing anaconda environbments can be found at [anaconda's official page](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
@@ -46,8 +47,9 @@ Keeping all parameters fixed, and using the default architecture for the underly
 
 ### Test the Embedding Network
 
-> **Note** that the model state to be loaded for evaluation is set by default.
-> To change this, change the value assigned to variable `model_path` in [src/prototypical/tester_exhaustive.py](./src/prototypical/tester_exhaustive.py)
+> [!Note]
+> - The model state for evaluation is set by default. To change this, change the value assigned to variable `model_path` in [src/prototypical/tester_exhaustive.py](src/prototypical/tester_exhaustive.py).
+> - To test on a different dataset, the dataset interfacing classes need to be defined according to the data files structure. See [the class for ISIC 2018 data](/Experiments/src/data/ISIC18_T3_Dataset.py), for instance.
 
 - Activate the conda environment set up in the previous stage.
   ```
