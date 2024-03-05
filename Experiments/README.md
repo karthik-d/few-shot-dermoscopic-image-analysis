@@ -1,7 +1,8 @@
 ## Procedure to Execute Experiments
 
-> **Note** that the procedures mentioned here are to only train and batch-wise sample and test the embedding network.   
-> The remainder of the execution procedure is yet to be documents, but follows a similar workflow and can be retraced through the modularly structured pluggable portions and the commented lines in [run.py](src/run.py).
+> [!Note]
+> Only the procedures to train, batch-wise sample, and test the embedding network are included below.
+> The remainder of the execution procedure is yet to be documented, but follows a similar workflow and can be retraced through the modularly structured pluggable portions and the commented lines in [run.py](src/run.py).
 
 ### Clone the repository and set up the Python environment
   - This implementation used **anaconda** for managing libraries, and the environment can be reproduced using the dependency file: [dependencies.yml](./dependencies.yml).
@@ -23,7 +24,9 @@
 
 Keeping all parameters fixed, and using the default architecture for the underlying network, the following steps will train the embedding network.
 
-> **Note** that, by default, the model states after each epoch will be saved into `Experiments/logs/prototypical`.
+> [!Note]
+> - By default, the model states after each epoch will be saved into [`Experiments/logs/prototypical`](./Experiments/logs/prototypical).
+> - To train on a different dataset, the dataset interfacing classes need to be defined according to the data files structure. See [the class for ISIC 2018 data](/Experiments/src/data/ISIC18_T3_Dataset.py), for instance.
 
 - Activate the conda environment set up in the previous stage.
   ```
