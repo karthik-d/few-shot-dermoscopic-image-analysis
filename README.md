@@ -31,6 +31,11 @@ If you find our work useful in your research, please cite us:
 }
 ```
 
+## Datasets for evaluation.
+- PH2 Dataset.
+- ISIC 2018 Skin Lesions Dataset.
+- Derm7pt dataset.
+
 ## Motivation
 
 - Annotated images and ground truth for the **diagnosis of rare and novel diseases** are scarce. This is expected to prevail, considering the small number of affected patient population and limited specialized clinical expertise to annotate images. 
