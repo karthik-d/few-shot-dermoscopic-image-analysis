@@ -32,9 +32,9 @@ If you find our work useful in your research, please cite us:
 ```
 
 ## Datasets for evaluation.
-- PH2 Dataset.
+- [Derm7pt Dataset](https://derm.cs.sfu.ca/Welcome.html).
 - ISIC 2018 Skin Lesions Dataset.
-- Derm7pt dataset.
+- [PH2 dataset](https://ieeexplore.ieee.org/document/6610779).
 
 ## Motivation
 
