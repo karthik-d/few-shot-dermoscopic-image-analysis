@@ -31,7 +31,7 @@ If you find our work useful in your research, please cite us:
 }
 ```
 
-## Datasets for evaluation.
+## Open-source datasets used for evaluation.
 - [Derm7pt Dataset](https://derm.cs.sfu.ca/Welcome.html).
 - [ISIC 2018, Task 3 Skin Lesions Dataset](https://challenge.isic-archive.com/data/#2018).
 - [PH2 dataset](https://ieeexplore.ieee.org/document/6610779).
@@ -49,11 +49,11 @@ Specifically, it proposes a two-stage training and inference approach,
 - A **baseline supervised learner** on the meta-training set that allows a network to learn highly representative and generalizable feature embeddings for images, that are readily transferable to new few-shot learning tasks.
 - Positing that a representative feature embedding can be more effective than complex meta-learning algorithms, a **simple classifier** is trained atop these representations for downstream classification into lesion types.
 
-  <img src="./assets/figures/embedding-metaleaning-flow-padded.png" width="600">
+  <img src="./docs/assets/figures/embedding-metaleaning-flow-padded.png" width="600">
 
 ## Key References
 
-### [[CVPR-2020] Meta-DermDiagnosis Few-Shot Skin Disease Identification using Meta-Learning.pdf](./Literature/%5BCVPR-2020%5D%20Meta-DermDiagnosis%20Few-Shot%20Skin%20Disease%20Identification%20using%20Meta-Learning.pdf)
+### [[CVPR-2020] Meta-DermDiagnosis Few-Shot Skin Disease Identification using Meta-Learning.pdf](./docs/literature/%5BCVPR-2020%5D%20Meta-DermDiagnosis%20Few-Shot%20Skin%20Disease%20Identification%20using%20Meta-Learning.pdf)
 
 - Proposes the use of meta-learning techniques for efficient model adaptation for extremely low-data scenarios
 - Applies Group equivariant convolutions (G-convolutions) in place of the normal spatial convolution filters
@@ -64,15 +64,15 @@ Specifically, it proposes a two-stage training and inference approach,
 - Outperforms DAML on ISIC 2018
 - Implementation Code NOT available
 
-### [[CVPR-2018] Learning to Compare Relation Network for Few-Shot Learning](./Literature/%5BCVPR-2018%5D%20Learning%20to%20Compare%20Relation%20Network%20for%20Few-Shot%20Learning.pdf)
+### [[CVPR-2018] Learning to Compare Relation Network for Few-Shot Learning](./docs/literature/%5BCVPR-2018%5D%20Learning%20to%20Compare%20Relation%20Network%20for%20Few-Shot%20Learning.pdf)
 
 - The paper that proposed Relation Networks for Few-Shot Learning.
 
-### [[NeurIPS-2017] Prototypical Networks for Few-shot Learning](./Literature/%5BNeurIPS-2017%5D%20Prototypical%20Networks%20for%20Few-shot%20Learning.pdf)
+### [[NeurIPS-2017] Prototypical Networks for Few-shot Learning](./docs/literature/%5BNeurIPS-2017%5D%20Prototypical%20Networks%20for%20Few-shot%20Learning.pdf)
 
 - The paper that proposed Protoypical Networks for Few-Shot Learning.
 
-### [[Elsevier-PR-2020] Temperature network for few-shot learning with distribution-aware large-margin metric](./Literature/%5BElsevier-PR-2020%5D%20Temperature%20network%20for%20few-shot%20learning%20with%20distribution-aware.pdf)
+### [[Elsevier-PR-2020] Temperature network for few-shot learning with distribution-aware large-margin metric](./docs/literature/%5BElsevier-PR-2020%5D%20Temperature%20network%20for%20few-shot%20learning%20with%20distribution-aware.pdf)
 
 - An improvement of Prototypical Networks, by generating query-specific prototypes and thus results in local
 and distribution-aware metric 
