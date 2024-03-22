@@ -31,7 +31,7 @@ config.update(
         num_query_val = 10,
         num_support_test = 3,   
         manual_seed = 7,
-        cuda = True
+        cuda = False
     )
 )
 

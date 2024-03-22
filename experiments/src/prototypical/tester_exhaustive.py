@@ -19,8 +19,14 @@ import torch
 import os
 
 
+# configure to use the SECOND cuda core.
+device = 'cuda:1' if (torch.cuda.is_available() and config.cuda) else 'cpu'
+torch.cuda.empty_cache()
+print(device)
+
+
 def init_seed(config):
-    torch.cuda.cudnn_enabled = True
+    torch.cuda.cudnn_enabled = config.cuda
     np.random.seed(config.manual_seed)
     torch.manual_seed(config.manual_seed)
     torch.cuda.manual_seed(config.manual_seed)
@@ -108,7 +114,6 @@ def init_protonet(config):
     Initialize the ProtoNet architecture
     """
 
-    device = 'cuda:0' if (torch.cuda.is_available() and config.cuda) else 'cpu'
     return ProtoNet().to(device)
 
 
@@ -118,7 +123,6 @@ def init_metaderm(config):
     Initialize the MetaDerm architecture
     """
 
-    device = 'cuda:0' if (torch.cuda.is_available() and config.cuda) else 'cpu'
     model = MetaDerm().to(device)
     print(model)
     return model
@@ -131,7 +135,6 @@ def run_concrete_test_loop(config, test_dataloader, loss_fn, model, dataset):
     Run a trained model through the test dataset
     """
 
-    device = 'cuda:0' if (torch.cuda.is_available() and config.cuda) else 'cpu'
     avg_acc = []
 
     # Test as average of 5 iterations
@@ -185,44 +188,40 @@ def run_concrete_test_loop(config, test_dataloader, loss_fn, model, dataset):
 
 # TODO: Produce DOCKER file for submission to ISIC Challenge Website
 def test():
-    
-    """
-    Initialize all parameters and test the model
-    - driver wrapper for model testing
-    """
 
-    if torch.cuda.is_available() and not config.cuda:
-        print("CUDA device available and unused")
+	"""
+	Initialize all parameters and test the model
+	- driver wrapper for model testing
+	"""
 
-    # load dataset
-    init_seed(config)
-    test_dataloader, test_dataset, sampler = init_dataloader(
-        config=config, 
-        data_config=data_config, 
-        mode='test'
-    )
+	if torch.cuda.is_available() and not config.cuda:
+		print("CUDA device available and unused")
 
-    loss_fn = get_prototypical_loss_fn(sampler)
+	# load dataset
+	init_seed(config)
+	test_dataloader, test_dataset, sampler = init_dataloader(
+		config=config, 
+		data_config=data_config, 
+		mode='test'
+	)
 
-    # load model
-    model = init_metaderm(config)
-    # model_path = os.path.join(
-    #     config.logs_path, 
-    #     'best_model.pth'
-    # )
+	loss_fn = get_prototypical_loss_fn(sampler)
 
-    model_path = os.path.join(
-        '/home/miruna/Skin-FSL/prototypical/Experiments/logs/prototypical',
-        'best_model.pth'
-    )
-    model.load_state_dict(torch.load(model_path))
+	# load model
+	model = init_metaderm(config)
+	model_path = os.path.join(
+		config.logs_path, 
+		'best_model.pth'
+	)
+	print(model_path)
+	model.load_state_dict(torch.load(model_path, map_location=torch.device(device)))
 
-    # run test
-    run_concrete_test_loop(
-        config=config,
-        test_dataloader=test_dataloader,
-        loss_fn=loss_fn,
-        model=model,
-        dataset=test_dataset
-    )
+	# run test
+	run_concrete_test_loop(
+		config=config,
+		test_dataloader=test_dataloader,
+		loss_fn=loss_fn,
+		model=model,
+		dataset=test_dataset
+	)
 
