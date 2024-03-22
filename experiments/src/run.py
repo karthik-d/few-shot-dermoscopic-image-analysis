@@ -10,8 +10,8 @@ from classifier_nw import tester_derm7 as cnw_tester_derm7
 
 from data import split_train_test
 
-trainer.train()
-#tester_exhaustive.test()
+# trainer.train()
+tester_exhaustive.test()
 # tester_exhaustive_extended.test()
 
 # cnw_trainer.train()

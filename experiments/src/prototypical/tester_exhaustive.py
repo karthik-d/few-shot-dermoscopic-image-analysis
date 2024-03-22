@@ -8,6 +8,7 @@ from . import transforms
 from prototypical.config import config
 from data.config import config as data_config
 from data.ISIC18_T3_Dataset import ISIC18_T3_Dataset
+from data.PH2_Dataset import PH2_Dataset
 from utils import helpers, displayers
 
 from tqdm import tqdm
@@ -25,11 +26,30 @@ def init_seed(config):
     torch.cuda.manual_seed(config.manual_seed)
 
 
-def init_dataset(config, data_config, mode):
+def init_isic_t3_dataset(config, data_config, mode):
 
     dataset = ISIC18_T3_Dataset(
         mode=mode, 
         root=data_config.isic18_t3_root_path,
+        transform=transforms.compose_transforms([
+            transforms.get_resize_transform()
+        ])
+    )
+
+    # Ensure classes count
+    if dataset.num_classes < config.classes_per_it_tr or dataset.num_classes < config.classes_per_it_val:
+        raise(Exception('There are not enough classes in the dataset in order ' +
+                        'to satisfy the chosen classes_per_it. Decrease the ' +
+                        'classes_per_it_{tr/val} option and try again.'))
+
+    return dataset
+
+
+def init_ph2_dataset(config, data_config, mode):
+
+    dataset = PH2_Dataset(
+        mode=mode, 
+        root=data_config.ph2_root_path,
         transform=transforms.compose_transforms([
             transforms.get_resize_transform()
         ])
@@ -66,7 +86,7 @@ def init_sampler(config, class_names, labels, mode):
 def init_dataloader(config, data_config, mode):
 
     # Make dataset and samples
-    dataset = init_dataset(config, data_config, mode)
+    dataset = init_ph2_dataset(config, data_config, mode)
     sampler = init_sampler(config, dataset.class_names, dataset.labels, mode)
     
     # Wrap the dataset into torch's dataloader

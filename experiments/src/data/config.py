@@ -27,8 +27,11 @@ config.update(
             config.data_root_path, 
             'ISIC18-T3'
         ),
-        derm7pt_root_path = '/home/miruna/Skin-FSL/Derm7pt/release_v0'
-        # isic18_t3_root_path = "/home/miruna/Skin-FSL/repo/Experiments/data/datasets/ISIC18-T3/ds_phase_1"
+        derm7pt_root_path = '/home/miruna/Skin-FSL/Derm7pt/release_v0',
+		ph2_root_path = os.path.join(
+            config.data_root_path, 
+            'PH2_Dataset'
+        )
     )
 )
 
