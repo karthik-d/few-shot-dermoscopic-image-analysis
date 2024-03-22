@@ -64,8 +64,6 @@ class PrototypicalBatchSampler(object):
 
             # update num_elem_per_class
             self.numel_per_class[label_idx] += 1
-
-        print(self.numel_per_class)
             
 
     def __iter__(self):

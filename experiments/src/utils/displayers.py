@@ -36,12 +36,11 @@ def get_printable_confusion_matrix(
         name="Prediction"
     )
 
-    print(prediction)
-    print(truth)
-    print(prediction.unique())
-    print(truth.unique())
-
-    print(metrics.confusion_matrix(truth, prediction))
+    # print(prediction)
+    # print(truth)
+    # print(prediction.unique())
+    # print(truth.unique())
+    # print(metrics.confusion_matrix(truth, prediction))
 
     confusion_matrix = pd.crosstab(
         index=truth, 

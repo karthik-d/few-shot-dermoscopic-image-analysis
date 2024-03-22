@@ -31,7 +31,6 @@ class PH2_Dataset(Dataset):
 
         NOTE: CSV must be present in the [ROOT]/data directory
         """
-        #print("My root ="+root)
         super(PH2_Dataset, self).__init__()
 
         # Fetch CSV

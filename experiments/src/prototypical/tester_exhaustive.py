@@ -213,7 +213,6 @@ def test():
 		config.logs_path, 
 		'best_model.pth'
 	)
-	print(model_path)
 	model.load_state_dict(torch.load(model_path, map_location=torch.device(device)))
 
 	# run test
