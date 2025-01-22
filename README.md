@@ -9,8 +9,8 @@ Model building, experiments, references, and source code for research w theork o
 The following references will aid in reproducing this implementation, and to extend the experiments presented in the paper for further analyses.
 
 - [Research Paper Preprint [arXiv]](https://arxiv.org/abs/2210.16954).
-- [Brief Instructional on running Training & Testing Experiments [Markdown]](./Experiments/README.md).
-- [Dataset Sources, Splitting Phases, and Experiment Descriptions [Markdown]](./Experiments/data/README.md).
+- [Brief Instructional on running Training & Testing Experiments [Markdown]](./experiments/README.md).
+- [Dataset Sources, Splitting Phases, and Experiment Descriptions [Markdown]](./experiments/data/README.md).
 
 ## Cite Us
 
