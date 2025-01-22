@@ -7,7 +7,7 @@
 
 ### Distribution
 
-![Data Distribution](/assets/ISIC18_T3_Distribution.png)
+![Data Distribution](/docs/assets/figures/ISIC18_T3_Distribution.png)
 
 
 ## Experiment Methods
@@ -44,7 +44,7 @@ Query Domain:   tensor([0, 1, 2, 3, 4, 5, 6])
 ```
 
 ##### Results
-![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-1_exp-1.jpg)
+![Result: Confusion Matrix](/docs/assets/confusion-matrix/ds-phase-1_exp-1.jpg)
 
 ### DS Phase 2
 
@@ -71,7 +71,7 @@ Query Domain:   tensor([0, 1, 2])
 ```
 
 ##### Results
-![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-2_exp-1.jpg)
+![Result: Confusion Matrix](/docs/assets/confusion-matrix/ds-phase-2_exp-1.jpg)
 
 ### DS Phase 3
 
@@ -104,7 +104,7 @@ Query Domain:   tensor([0, 1, 2])
 - When sampling, query set is populated only with one of `MEL`, `NV` and `BCC`. Support set, however, can contain any one of the seven classes
 
 ##### Results
-![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-3_exp-1.jpg)
+![Result: Confusion Matrix](/docs/assets/confusion-matrix/ds-phase-3_exp-1.jpg)
 
 #### Experiment 2
 
@@ -127,7 +127,7 @@ Query Domain:   tensor([0, 1, 2])
 - When sampling, query set is populated only with one of `MEL`, `NV` and `BCC`. Support set, however, can contain any one of the seven classes
 
 ##### Results
-![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-3_exp-2.jpg)
+![Result: Confusion Matrix](/docs/assets/confusion-matrix/ds-phase-3_exp-2.jpg)
 
 
 
@@ -153,7 +153,7 @@ Query Domain:   tensor([0, 1, 2])
 - As an additional constraint, to study the impact of misclassification induced by `NV`, it is always included in the support set
 
 ##### Results
-![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-3_exp-3.jpg)
+![Result: Confusion Matrix](/docs/assets/confusion-matrix/ds-phase-3_exp-3.jpg)
 
 
 ### DS Phase 4
@@ -189,7 +189,7 @@ Query Domain:   tensor([3, 5, 6])
 
 ##### Results
 
-![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-4_exp-1.jpg)
+![Result: Confusion Matrix](/docs/assets/confusion-matrix/ds-phase-4_exp-1.jpg)
 
 
 #### Experiment 2
@@ -216,4 +216,4 @@ Query Domain:   tensor([3, 5, 6])
 
 ##### Results
 
-![Result: Confusion Matrix](/assets/confusion-matrix/ds-phase-4_exp-2.jpg)
+![Result: Confusion Matrix](/docs/assets/confusion-matrix/ds-phase-4_exp-2.jpg)
